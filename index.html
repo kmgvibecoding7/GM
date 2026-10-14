@@ -1,0 +1,803 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QuantDrill — тренажёр формул GMAT</title>
+<meta name="description" content="Тренажёр математических формул GMAT Quant: интервальные повторения, 4 режима, XP, streak и рейтинг.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<style>
+:root{--bg:#f5f6fb;--card:#fff;--ink:#161a2e;--mut:#667089;--line:#e3e6f0;--acc:#4f46e5;--acc-ink:#fff;--acc2:#0d9488;--ok:#15803d;--okbg:#dcfce7;--bad:#b91c1c;--badbg:#fee2e2;--warn:#b45309;--warnbg:#fef3c7;--shadow:0 1px 2px rgba(20,24,50,.06),0 8px 24px rgba(20,24,50,.06);--r:16px}
+:root[data-theme=dark]{--bg:#0e1120;--card:#181c32;--ink:#eceefb;--mut:#9aa3c4;--line:#2a2f4d;--acc:#8b86ff;--acc-ink:#0e1120;--acc2:#2dd4bf;--ok:#4ade80;--okbg:#12301f;--bad:#f87171;--badbg:#3a1618;--warn:#fbbf24;--warnbg:#3a2c0e;--shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:72px}
+h1,h2,h3{line-height:1.2;margin:0 0 .5em;letter-spacing:-.01em}h1{font-size:clamp(1.8rem,5vw,3rem)}h2{font-size:1.5rem}h3{font-size:1.1rem}
+p{margin:0 0 1em}a{color:var(--acc)}button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:14px;height:60px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:1.15rem;color:var(--ink);text-decoration:none}
+.logo i{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-style:normal;font-size:1.05rem}
+nav.main{display:flex;gap:2px;margin-left:12px}
+nav.main a{padding:8px 11px;border-radius:10px;color:var(--mut);text-decoration:none;font-weight:600;font-size:.93rem}
+nav.main a:hover{background:var(--line)}nav.main a.on{background:var(--acc);color:var(--acc-ink)}
+.sp{flex:1}.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:99px;background:var(--card);border:1px solid var(--line);font-weight:700;font-size:.88rem;white-space:nowrap}
+.icon-btn{border:1px solid var(--line);background:var(--card);border-radius:10px;width:40px;height:40px;cursor:pointer;font-size:1.1rem}
+nav.tabs{display:none}
+@media(max-width:820px){nav.main{display:none}nav.tabs{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:30;background:var(--card);border-top:1px solid var(--line);padding:4px 4px calc(4px + env(safe-area-inset-bottom))}
+nav.tabs a{flex:1;text-align:center;text-decoration:none;color:var(--mut);font-size:.7rem;font-weight:700;padding:6px 2px;min-height:48px;border-radius:10px}nav.tabs a b{display:block;font-size:1.25rem;line-height:1.2}nav.tabs a.on{color:var(--acc)}}
+@media(max-width:520px){.bar{gap:8px}.logo span{display:none}.chip{padding:4px 8px;font-size:.8rem}}
+main{padding:24px 0 40px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}.g4{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}
+.mut{color:var(--mut)}.sm{font-size:.88rem}.b{font-weight:700}.c{text-align:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 20px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-weight:700;cursor:pointer;text-decoration:none;color:var(--ink);transition:transform .12s,background .15s}
+.btn:hover{transform:translateY(-1px)}.btn:active{transform:none}
+.btn.pri{background:var(--acc);color:var(--acc-ink);border-color:transparent}.btn.big{min-height:54px;padding:0 28px;font-size:1.05rem}.btn.ghost{background:transparent}.btn.sm{min-height:36px;padding:0 12px;font-size:.88rem}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.tag{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.76rem;font-weight:700;background:var(--line);color:var(--mut)}.tag.leg{background:var(--warnbg);color:var(--warn)}.tag.ok{background:var(--okbg);color:var(--ok)}.tag.bad{background:var(--badbg);color:var(--bad)}.tag.acc{background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--acc)}
+.bar-bg{height:8px;border-radius:9px;background:var(--line);overflow:hidden}.bar-bg>i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:9px;transition:width .4s}
+.hero{padding:40px 0 24px;display:grid;gap:32px;grid-template-columns:1.15fr .85fr;align-items:center}
+@media(max-width:820px){.hero{grid-template-columns:1fr}}
+.hero h1 span{background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{font-size:1.15rem;color:var(--mut);max-width:560px}
+.float-card{transform:rotate(2deg)}
+.tex{font-size:1.1em}.bigtex .katex{font-size:1.7em}
+.feat{display:flex;gap:12px}.feat .em{font-size:1.6rem}
+.topic{cursor:pointer;display:block;text-decoration:none;color:inherit;transition:transform .15s}.topic:hover{transform:translateY(-3px)}
+.topic .em{font-size:1.8rem}
+.flist a{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px 4px;border-bottom:1px solid var(--line);text-decoration:none;color:inherit}.flist a:last-child{border:0}.flist a:hover{background:color-mix(in srgb,var(--acc) 6%,transparent)}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--line);flex:none}.dot.m{background:var(--ok)}.dot.l{background:var(--warn)}.dot.b{background:var(--bad)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.pick{padding:8px 14px;border-radius:99px;border:1.5px solid var(--line);background:var(--card);cursor:pointer;font-weight:600;font-size:.92rem;min-height:40px}.pick.on{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+.mode{padding:16px;border:2px solid var(--line);border-radius:14px;background:var(--card);cursor:pointer;text-align:left;display:block;width:100%}.mode.on{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 8%,var(--card))}.mode .em{font-size:1.5rem}
+label.f{display:block;font-weight:700;margin:14px 0 6px;font-size:.92rem}
+input[type=text],input[type=date],input[type=number],select,textarea{width:100%;padding:11px 13px;border-radius:11px;border:1.5px solid var(--line);background:var(--bg);min-height:44px}
+textarea{resize:vertical;min-height:80px}
+.train{max-width:700px;margin:0 auto}
+.tr-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}.tr-top .bar-bg{flex:1}
+.q{padding:28px 22px;min-height:260px}
+.flip{cursor:pointer;user-select:none;text-align:center;display:flex;flex-direction:column;justify-content:center;min-height:280px;touch-action:pan-y}
+.opts{display:grid;gap:10px;margin-top:18px}
+.opt{display:flex;gap:12px;align-items:center;text-align:left;padding:14px 16px;border-radius:13px;border:2px solid var(--line);background:var(--card);cursor:pointer;min-height:54px;font-size:1rem;width:100%}
+.opt:hover:not(:disabled){border-color:var(--acc)}.opt kbd{flex:none;width:26px;height:26px;border-radius:7px;background:var(--line);display:grid;place-items:center;font-size:.8rem;font-weight:800}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}.opt.bad{border-color:var(--bad);background:var(--badbg)}.opt:disabled{cursor:default}
+.rates{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.rates button{min-height:54px;border-radius:12px;border:0;font-weight:800;cursor:pointer;color:#fff;font-size:.9rem}.r1{background:#dc2626}.r2{background:#d97706}.r3{background:#16a34a}.r4{background:#0d9488}
+.fb{margin-top:16px;padding:14px 16px;border-radius:13px}.fb.ok{background:var(--okbg);color:var(--ok)}.fb.bad{background:var(--badbg);color:var(--bad)}.fb .in{color:var(--ink)}
+.timer{font-variant-numeric:tabular-nums}.qt{height:5px;border-radius:5px;background:var(--line);overflow:hidden;margin-bottom:10px}.qt i{display:block;height:100%;background:var(--warn);transition:width .25s linear}
+.ring{position:relative;width:120px;height:120px;flex:none}.ring svg{transform:rotate(-90deg)}.ring .t{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-weight:800;line-height:1.1}
+.stat{text-align:center}.stat .n{font-size:1.9rem;font-weight:800;letter-spacing:-.02em}.stat .l{color:var(--mut);font-size:.85rem}
+.hm{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,14px);gap:3px;overflow-x:auto;padding-bottom:4px}.hm i{width:14px;height:14px;border-radius:3px;background:var(--line)}.hm i.l1{background:color-mix(in srgb,var(--acc) 30%,var(--line))}.hm i.l2{background:color-mix(in srgb,var(--acc) 55%,var(--line))}.hm i.l3{background:color-mix(in srgb,var(--acc) 80%,var(--line))}.hm i.l4{background:var(--acc)}
+.hrow{display:grid;grid-template-columns:130px 1fr 44px;gap:10px;align-items:center;margin:7px 0;font-size:.9rem}
+@media(max-width:520px){.hrow{grid-template-columns:96px 1fr 40px}}
+table{width:100%;border-collapse:collapse}th,td{padding:10px 8px;text-align:left;border-bottom:1px solid var(--line)}th{font-size:.8rem;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}tr.me td{background:color-mix(in srgb,var(--acc) 12%,transparent);font-weight:700}
+.ach{text-align:center}.ach .em{font-size:2.2rem}.ach.lock{opacity:.45;filter:grayscale(1)}
+.toast-box{position:fixed;top:72px;right:16px;z-index:100;display:grid;gap:8px;max-width:340px}
+.toast{background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:12px;box-shadow:var(--shadow);font-weight:600;animation:in .25s}@keyframes in{from{opacity:0;transform:translateY(-8px)}}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:11px;overflow:hidden}.seg button{border:0;background:var(--card);padding:8px 16px;cursor:pointer;font-weight:700;min-height:40px}.seg button.on{background:var(--acc);color:var(--acc-ink)}
+.notice{background:var(--warnbg);color:var(--warn);padding:10px 14px;border-radius:12px;font-size:.88rem;font-weight:600}
+.vars{color:var(--mut);font-size:.92rem}
+details summary{cursor:pointer;font-weight:700}
+footer{color:var(--mut);font-size:.85rem;text-align:center;padding:24px 16px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap bar" id="bar"></div></header>
+<main class="wrap" id="app"></main>
+<footer>QuantDrill · демо-версия MVP · данные хранятся только в вашем браузере</footer>
+<nav class="tabs" id="tabs"></nav>
+<div class="toast-box" id="toasts" aria-live="polite"></div>
+
+<script>
+'use strict';
+const R = String.raw;
+/* ============================ ДАННЫЕ ============================ */
+const AVATARS = ['🦊','🐼','🦉','🐯','🐙','🦄','🐧','🦁'];
+const TOPICS = [
+ {id:1,ru:'Арифметика',en:'Arithmetic',em:'🔢'},
+ {id:2,ru:'Проценты',en:'Percents',em:'％'},
+ {id:3,ru:'Отношения и пропорции',en:'Ratios & Proportions',em:'⚖️'},
+ {id:4,ru:'Степени и корни',en:'Exponents & Roots',em:'√'},
+ {id:5,ru:'Алгебра',en:'Algebra',em:'𝑥'},
+ {id:6,ru:'Неравенства и модули',en:'Inequalities & Absolute Value',em:'∣x∣'},
+ {id:7,ru:'Текстовые задачи',en:'Word Problems',em:'🚆'},
+ {id:8,ru:'Простой и сложный процент',en:'Simple & Compound Interest',em:'💰'},
+ {id:9,ru:'Последовательности',en:'Sequences',em:'📈'},
+ {id:10,ru:'Комбинаторика',en:'Combinatorics',em:'🎲'},
+ {id:11,ru:'Вероятность',en:'Probability',em:'🎯'},
+ {id:12,ru:'Статистика',en:'Statistics',em:'📊'},
+ {id:13,ru:'Множества',en:'Sets',em:'⭕'},
+ {id:14,ru:'Свойства чисел',en:'Number Properties',em:'🧮'},
+ {id:15,ru:'Геометрия',en:'Geometry',em:'📐',legacy:true}
+];
+let _id=0;
+function F(t,ru,en,tex,desc,w,ex,diff,d,ans,extra){return Object.assign({id:'f'+(++_id),t,ru,en,tex,desc,w,ex,diff,d,ans:ans||null},extra||{})}
+const BASE = [
+ F(1,'НОД и НОК','GCD × LCM',R`\gcd(a,b)\cdot\operatorname{lcm}(a,b)=a\cdot b`,'Связывает наибольший общий делитель и наименьшее общее кратное двух натуральных чисел. Помогает быстро найти НОК, если известен НОД.','a, b — натуральные числа','a=12, b=18: НОД=6, НОК=36, и 6·36=216=12·18.',1,[R`\gcd(a,b)+\operatorname{lcm}(a,b)=a+b`,R`\gcd(a,b)\cdot\operatorname{lcm}(a,b)=a+b`,R`\frac{\operatorname{lcm}(a,b)}{\gcd(a,b)}=a\cdot b`]),
+ F(1,'Количество кратных','Multiples count',R`\left\lfloor \frac{N}{k}\right\rfloor`,'Сколько целых чисел от 1 до N делятся на k.','N — верхняя граница, k — делитель, ⌊ ⌋ — округление вниз','Сколько чисел от 1 до 100 кратны 7? ⌊100/7⌋ = 14.',1,[R`\left\lceil \frac{N}{k}\right\rceil`,R`\frac{N}{k}+1`,R`N-k`]),
+ F(1,'Сумма первых n натуральных чисел','Sum of first n integers',R`S=\frac{n(n+1)}{2}`,'Сумма 1+2+…+n. Часто нужна для задач на последовательные числа.','n — количество слагаемых, S — сумма','1+2+…+100 = 100·101/2 = 5050.',1,[R`S=\frac{n^2}{2}`,R`S=\frac{n(n-1)}{2}`,R`S=n(n+1)`],'S=n*(n+1)/2'),
+
+ F(2,'Процентное изменение','Percent change',R`p=\frac{n-o}{o}\cdot 100`,'Насколько процентов новое значение отличается от старого. Всегда делим на старое значение.','n — новое значение, o — старое, p — изменение в %','Цена выросла с 80 до 100: (100−80)/80·100 = 25%.',1,[R`p=\frac{n-o}{n}\cdot 100`,R`p=\frac{o-n}{o}\cdot 100`,R`p=\frac{n}{o}\cdot 100`],'p=(n-o)/o*100',{mist:'Делить на новое значение вместо старого.'}),
+ F(2,'Последовательные процентные изменения','Successive percent changes',R`p=a+b+\frac{ab}{100}`,'Итоговое изменение после двух последовательных изменений на a% и b%. Для снижения подставляйте отрицательное значение.','a, b — изменения в % (со знаком)','Рост на 20%, затем падение на 10%: 20 − 10 − 2 = +8%.',2,[R`p=a+b`,R`p=a+b-\frac{ab}{100}`,R`p=\frac{a+b}{2}`],'p=a+b+a*b/100',{mist:'Складывать проценты напрямую: +20% и −20% не дают 0.'}),
+ F(2,'Маржа','Profit margin',R`m=\frac{r-c}{r}\cdot 100`,'Маржа считается от выручки (цены продажи), а наценка — от себестоимости.','r — выручка, c — себестоимость, m — маржа в %','Цена 200, себестоимость 150: маржа 25%, наценка 33,3%.',2,[R`m=\frac{r-c}{c}\cdot 100`,R`m=\frac{r}{c}\cdot 100`,R`m=\frac{c}{r}\cdot 100`],'m=(r-c)/r*100'),
+
+ F(3,'Свойство пропорции','Cross-multiplication',R`\frac{a}{b}=\frac{c}{d}\iff ad=bc`,'Крест-накрест: произведение крайних равно произведению средних.','a, b, c, d — ненулевые числа','3/4 = 6/8 → 3·8 = 4·6 = 24.',1,[R`\frac{a}{b}=\frac{c}{d}\iff ac=bd`,R`\frac{a}{b}=\frac{c}{d}\iff a+d=b+c`,R`\frac{a}{b}=\frac{c}{d}\iff ab=cd`],'a=b*c/d'),
+ F(3,'Деление в заданном отношении','Splitting in a ratio',R`x=T\cdot\frac{a}{a+b}`,'Часть целого T при отношении частей a : b.','T — целое, a:b — отношение, x — часть, соответствующая a','Разделить 120 в отношении 2:3 → первая часть 120·2/5 = 48.',1,[R`x=T\cdot\frac{a}{b}`,R`x=\frac{T}{a+b}`,R`x=T\cdot\frac{a}{a-b}`],'x=T*a/(a+b)'),
+ F(3,'Обратная пропорциональность','Inverse proportion',R`a\cdot b=c\cdot d`,'Если величины обратно пропорциональны, их произведение постоянно.','a, b — значения до изменения, c, d — после','6 рабочих — 10 дней; 15 рабочих — x дней: 6·10 = 15·x, x = 4.',2,[R`\frac{a}{b}=\frac{c}{d}`,R`a+b=c+d`,R`a-b=c-d`],'a=c*d/b'),
+
+ F(4,'Произведение степеней','Product of powers',R`a^m\cdot a^n=a^{m+n}`,'При умножении степеней с одинаковым основанием показатели складываются.','a — основание, m, n — показатели','2³·2⁴ = 2⁷ = 128.',1,[R`a^m\cdot a^n=a^{mn}`,R`a^m\cdot a^n=(2a)^{m+n}`,R`a^m\cdot a^n=a^{m-n}`],'a^m*a^n=a^(m+n)'),
+ F(4,'Степень степени','Power of a power',R`(a^m)^n=a^{mn}`,'При возведении степени в степень показатели перемножаются.','a — основание, m, n — показатели','(3²)³ = 3⁶ = 729.',1,[R`(a^m)^n=a^{m+n}`,R`(a^m)^n=a^{m^n}`,R`(a^m)^n=a^m\cdot a^n`],'(a^m)^n=a^(m*n)'),
+ F(4,'Отрицательная степень','Negative exponent',R`a^{-n}=\frac{1}{a^n}`,'Отрицательный показатель — это обратная величина.','a ≠ 0, n — показатель','2⁻³ = 1/8.',1,[R`a^{-n}=-a^n`,R`a^{-n}=\frac{1}{a^{-n}}`,R`a^{-n}=\frac{1}{n^a}`],'a^(-n)=1/a^n'),
+ F(4,'Корень из произведения','Root of a product',R`\sqrt{ab}=\sqrt{a}\cdot\sqrt{b}`,'Корень из произведения равен произведению корней (при a, b ≥ 0).','a, b ≥ 0','√72 = √36·√2 = 6√2.',2,[R`\sqrt{a+b}=\sqrt{a}+\sqrt{b}`,R`\sqrt{ab}=\sqrt{a}+\sqrt{b}`,R`\sqrt{ab}=\frac{\sqrt a}{\sqrt b}`],'sqrt(a*b)=sqrt(a)*sqrt(b)',{mist:'Корень из суммы не равен сумме корней.'}),
+
+ F(5,'Квадрат суммы','Square of a sum',R`(a+b)^2=a^2+2ab+b^2`,'Одна из формул сокращённого умножения. Не забывайте удвоенное произведение.','a, b — любые числа','(x+3)² = x² + 6x + 9.',1,[R`(a+b)^2=a^2+b^2`,R`(a+b)^2=a^2+ab+b^2`,R`(a+b)^2=a^2-2ab+b^2`],'(a+b)^2=a^2+2*a*b+b^2',{mist:'Потерять удвоенное произведение 2ab.'}),
+ F(5,'Разность квадратов','Difference of squares',R`a^2-b^2=(a-b)(a+b)`,'Раскладывает разность квадратов на множители. Любимый приём GMAT.','a, b — любые числа','49 − 25 = (7−5)(7+5) = 24.',1,[R`a^2-b^2=(a-b)^2`,R`a^2-b^2=(a+b)^2`,R`a^2+b^2=(a+b)(a-b)`],'a^2-b^2=(a-b)*(a+b)'),
+ F(5,'Дискриминант','Discriminant',R`D=b^2-4ac`,'Определяет число корней квадратного уравнения ax²+bx+c=0: D>0 — два, D=0 — один, D<0 — нет.','a, b, c — коэффициенты','x²−5x+6=0: D=25−24=1 → два корня.',2,[R`D=b^2+4ac`,R`D=a^2-4bc`,R`D=b^2-2ac`],'D=b^2-4*a*c'),
+ F(5,'Теорема Виета','Vieta\'s formulas',R`x_1+x_2=-\frac{b}{a},\quad x_1x_2=\frac{c}{a}`,'Связывает корни квадратного уравнения с коэффициентами — позволяет не искать корни.','x₁, x₂ — корни ax²+bx+c=0','x²−5x+6=0: сумма 5, произведение 6 → корни 2 и 3.',2,[R`x_1+x_2=\frac{b}{a},\quad x_1x_2=\frac{c}{a}`,R`x_1+x_2=-\frac{b}{a},\quad x_1x_2=-\frac{c}{a}`,R`x_1+x_2=-b,\quad x_1x_2=c`]),
+ F(5,'Формула корней квадратного уравнения','Quadratic formula',R`x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}`,'Корни уравнения ax²+bx+c=0 при D ≥ 0.','a ≠ 0, b, c — коэффициенты','x²−5x+6=0: x = (5 ± 1)/2 = 3 или 2.',2,[R`x=\frac{b\pm\sqrt{b^2-4ac}}{2a}`,R`x=\frac{-b\pm\sqrt{b^2+4ac}}{2a}`,R`x=\frac{-b\pm\sqrt{b^2-4ac}}{a}`]),
+
+ F(6,'Неравенство с модулем: |x| < a','Absolute value: less than',R`|x|<a\iff -a<x<a`,'Расстояние от нуля меньше a — значит x лежит между −a и a (при a > 0).','a > 0','|x| < 3 ⇒ −3 < x < 3.',2,[R`|x|<a\iff x<a`,R`|x|<a\iff x<-a\ \text{or}\ x>a`,R`|x|<a\iff 0<x<a`]),
+ F(6,'Неравенство с модулем: |x| > a','Absolute value: greater than',R`|x|>a\iff x<-a\ \text{or}\ x>a`,'Расстояние от нуля больше a — два луча по обе стороны.','a > 0','|x| > 3 ⇒ x < −3 или x > 3.',2,[R`|x|>a\iff -a<x<a`,R`|x|>a\iff x>a`,R`|x|>a\iff x<-a\ \text{and}\ x>a`]),
+ F(6,'Неравенство треугольника','Triangle inequality',R`|a+b|\le|a|+|b|`,'Модуль суммы не превосходит суммы модулей. Равенство, если a и b одного знака.','a, b — любые числа','|3 + (−5)| = 2 ≤ 3 + 5 = 8.',3,[R`|a+b|\ge|a|+|b|`,R`|a+b|=|a|+|b|`,R`|a-b|\le|a|-|b|`]),
+
+ F(7,'Скорость, время, расстояние','Distance formula',R`d=r\cdot t`,'Основа всех задач на движение. Следите за единицами измерения.','d — расстояние, r — скорость, t — время','60 км/ч · 2,5 ч = 150 км.',1,[R`r=d\cdot t`,R`t=d\cdot r`,R`d=\frac{r}{t}`],'d=r*t'),
+ F(7,'Совместная работа','Combined work rate',R`t=\frac{ab}{a+b}`,'Время, за которое двое выполнят работу вместе, если по отдельности они тратят a и b.','a, b — время каждого в одиночку, t — совместное время','a=6, b=3: t = 18/9 = 2 ч.',2,[R`t=\frac{a+b}{ab}`,R`t=\frac{a+b}{2}`,R`t=a+b`],'t=a*b/(a+b)'),
+ F(7,'Смеси: средневзвешенное','Weighted average / mixtures',R`c=\frac{ap+bq}{a+b}`,'Концентрация (или средняя величина) смеси двух частей разного состава.','a, b — количества, p, q — концентрации, c — итог','2 л 10% и 3 л 20%: c = (20+60)/5 = 16%.',2,[R`c=\frac{p+q}{2}`,R`c=\frac{ap+bq}{ab}`,R`c=\frac{a+b}{p+q}`],'c=(a*p+b*q)/(a+b)'),
+ F(7,'Средняя скорость (равные пути)','Average speed',R`v=\frac{2ab}{a+b}`,'Средняя скорость, если туда и обратно едем с разными скоростями a и b. Это среднее гармоническое.','a, b — скорости на двух равных участках','40 и 60 км/ч: v = 4800/100 = 48 км/ч.',3,[R`v=\frac{a+b}{2}`,R`v=\sqrt{ab}`,R`v=\frac{a+b}{ab}`],'v=2*a*b/(a+b)',{mist:'Среднее арифметическое скоростей вместо гармонического.'}),
+
+ F(8,'Простой процент','Simple interest',R`I=Prt`,'Процентный доход при начислении только на первоначальную сумму.','P — сумма, r — ставка за период, t — число периодов','1000 при 5% за 3 года: 1000·0,05·3 = 150.',1,[R`I=\frac{Pr}{t}`,R`I=P(1+rt)`,R`I=P+rt`],'I=P*r*t'),
+ F(8,'Сложный процент','Compound interest',R`A=P\left(1+\frac{r}{n}\right)^{nt}`,'Итоговая сумма при капитализации n раз в год.','P — начальная сумма, r — годовая ставка, n — капитализаций в год, t — лет','1000 при 12% с ежемесячной капитализацией, 1 год: ≈ 1126,8.',2,[R`A=P(1+rn)^t`,R`A=P(1+r)^{nt}`,R`A=P\left(1+\frac{r}{nt}\right)`],'A=P*(1+r/n)^(n*t)'),
+ F(8,'Правило 72','Rule of 72',R`t\approx\frac{72}{r}`,'Приблизительное время удвоения вклада при ставке r% годовых.','r — ставка в %, t — лет','При 8%: 72/8 = 9 лет.',2,[R`t\approx\frac{r}{72}`,R`t\approx\frac{100}{r}`,R`t\approx 72r`],'t=72/r'),
+
+ F(9,'n-й член арифметической прогрессии','Arithmetic sequence: nth term',R`a_n=a_1+(n-1)d`,'Каждый следующий член больше предыдущего на разность d.','a₁ — первый член, d — разность, n — номер','a₁=3, d=4: a₁₀ = 3 + 9·4 = 39.',1,[R`a_n=a_1+nd`,R`a_n=a_1\cdot d^{n-1}`,R`a_n=a_1+(n+1)d`],'a_n=a_1+(n-1)*d'),
+ F(9,'Сумма арифметической прогрессии','Arithmetic series sum',R`S_n=\frac{n(a_1+a_n)}{2}`,'Сумма n первых членов: среднее первого и последнего, умноженное на n.','a₁, aₙ — первый и последний члены','3, 7, 11, 15: S₄ = 4·(3+15)/2 = 36.',2,[R`S_n=n(a_1+a_n)`,R`S_n=\frac{a_1+a_n}{2}`,R`S_n=\frac{n(a_1-a_n)}{2}`],'S_n=n*(a_1+a_n)/2'),
+ F(9,'n-й член геометрической прогрессии','Geometric sequence: nth term',R`a_n=a_1\cdot q^{n-1}`,'Каждый следующий член получается умножением на знаменатель q.','a₁ — первый член, q — знаменатель','a₁=2, q=3: a₄ = 2·27 = 54.',1,[R`a_n=a_1\cdot q^n`,R`a_n=a_1+q^{n-1}`,R`a_n=a_1\cdot (n-1)q`],'a_n=a_1*q^(n-1)'),
+ F(9,'Сумма геометрической прогрессии','Geometric series sum',R`S_n=\frac{a_1(q^n-1)}{q-1}`,'Сумма n первых членов при q ≠ 1.','a₁ — первый член, q ≠ 1','2, 6, 18: S₃ = 2·(27−1)/2 = 26.',3,[R`S_n=\frac{a_1(q^n+1)}{q-1}`,R`S_n=\frac{a_1(q^n-1)}{q+1}`,R`S_n=\frac{a_1 q^n}{q-1}`],'S_n=a_1*(q^n-1)/(q-1)'),
+
+ F(10,'Перестановки','Permutations',R`P=n!`,'Число способов упорядочить n различных объектов.','n! = 1·2·…·n','5 книг на полке: 5! = 120 способов.',1,[R`P=n^n`,R`P=n(n-1)`,R`P=2^n`],'P=n!',{int:true}),
+ F(10,'Размещения','Arrangements',R`A=\frac{n!}{(n-r)!}`,'Число упорядоченных выборок по r элементов из n.','n — всего, r — выбираем, порядок важен','Из 10 кандидатов выбрать 3 на разные должности: 10·9·8 = 720.',2,[R`A=\frac{n!}{r!}`,R`A=\frac{n!}{r!(n-r)!}`,R`A=n^r`],'A=n!/(n-r)!',{int:true}),
+ F(10,'Сочетания','Combinations',R`C=\frac{n!}{r!\,(n-r)!}`,'Число способов выбрать r элементов из n без учёта порядка.','n — всего, r — выбираем, порядок не важен','Выбрать 3 из 10: 10!/(3!·7!) = 120.',2,[R`C=\frac{n!}{(n-r)!}`,R`C=\frac{n!}{r!}`,R`C=\frac{r!(n-r)!}{n!}`],'C=n!/(r!*(n-r)!)',{int:true,mist:'Забыть поделить на r! — получатся размещения.'}),
+ F(10,'Перестановки с повторениями','Permutations with repetition',R`P=\frac{n!}{a!\,b!}`,'Число различных расстановок n объектов, среди которых a одинаковых одного вида и b другого.','n — всего, a, b — размеры групп одинаковых','Слово «ANNA»: 4!/(2!·2!) = 6.',3,[R`P=\frac{n!}{a+b}`,R`P=n!\cdot a!\cdot b!`,R`P=\frac{n!}{a!}+\frac{n!}{b!}`],'P=n!/(a!*b!)',{int:true}),
+
+ F(11,'Классическая вероятность','Classical probability',R`P=\frac{m}{n}`,'Отношение числа благоприятных исходов к числу всех равновозможных исходов.','m — благоприятные исходы, n — все исходы','Выпала чётная грань кубика: 3/6 = 1/2.',1,[R`P=\frac{n}{m}`,R`P=m\cdot n`,R`P=\frac{m}{m+n}`],'P=m/n'),
+ F(11,'Вероятность противоположного события','Complement rule',R`P(\bar A)=1-P(A)`,'Часто проще найти вероятность «хотя бы один» как 1 минус вероятность «ни одного».','P(A) — вероятность события A','Хотя бы одна «решка» в 3 бросках: 1 − (1/2)³ = 7/8.',1,[R`P(\bar A)=P(A)-1`,R`P(\bar A)=\frac{1}{P(A)}`,R`P(\bar A)=1+P(A)`]),
+ F(11,'Вероятность объединения','Addition rule',R`P(A\cup B)=P(A)+P(B)-P(A\cap B)`,'Вероятность того, что произойдёт A или B. Пересечение вычитаем, чтобы не считать дважды.','A ∪ B — «или», A ∩ B — «и»','P(A)=0,5; P(B)=0,4; P(A∩B)=0,2 → 0,7.',2,[R`P(A\cup B)=P(A)+P(B)`,R`P(A\cup B)=P(A)\cdot P(B)`,R`P(A\cup B)=P(A)+P(B)+P(A\cap B)`]),
+ F(11,'Независимые события','Independent events',R`P(A\cap B)=P(A)\cdot P(B)`,'Вероятность того, что произойдут оба независимых события — произведение вероятностей.','A, B независимы','Два броска монеты, оба «орёл»: 1/2·1/2 = 1/4.',1,[R`P(A\cap B)=P(A)+P(B)`,R`P(A\cap B)=\frac{P(A)}{P(B)}`,R`P(A\cap B)=P(A)-P(B)`]),
+ F(11,'Условная вероятность','Conditional probability',R`P(A\mid B)=\frac{P(A\cap B)}{P(B)}`,'Вероятность A при условии, что B уже произошло.','P(B) > 0','Из 100 человек 40 любят чай, 10 любят чай и кофе, 25 любят кофе: P(чай | кофе) = 10/25 = 0,4.',3,[R`P(A\mid B)=\frac{P(A\cap B)}{P(A)}`,R`P(A\mid B)=P(A)\cdot P(B)`,R`P(A\mid B)=\frac{P(B)}{P(A\cap B)}`]),
+
+ F(12,'Среднее арифметическое','Mean',R`M=\frac{S}{n}`,'Сумма значений, делённая на их количество. Отсюда S = M·n — частый приём.','S — сумма, n — количество, M — среднее','Среднее 5 чисел равно 8 → их сумма 40.',1,[R`M=S\cdot n`,R`M=\frac{n}{S}`,R`M=\frac{S}{n+1}`],'M=S/n'),
+ F(12,'Размах','Range',R`R=x_{\max}-x_{\min}`,'Разность наибольшего и наименьшего значений выборки.','x_max, x_min — наибольшее и наименьшее','Выборка 3, 8, 15 → размах 12.',1,[R`R=x_{\max}+x_{\min}`,R`R=\frac{x_{\max}+x_{\min}}{2}`,R`R=x_{\min}-x_{\max}`],'R=x_max-x_min'),
+ F(12,'Медиана (чётное n)','Median',R`\text{Med}=\frac{x_{n/2}+x_{n/2+1}}{2}`,'Выборку нужно упорядочить; при чётном числе значений берём среднее двух центральных.','x₍ᵢ₎ — i-е значение в упорядоченном ряду','2, 4, 6, 10 → медиана (4+6)/2 = 5.',2,[R`\text{Med}=x_{n/2}`,R`\text{Med}=\frac{x_1+x_n}{2}`,R`\text{Med}=\frac{x_{n/2}\cdot x_{n/2+1}}{2}`]),
+ F(12,'Стандартное отклонение','Standard deviation',R`\sigma=\sqrt{\frac{\sum_{i=1}^{n}(x_i-\mu)^2}{n}}`,'Мера разброса значений вокруг среднего. На GMAT обычно сравнивают, а не считают.','μ — среднее, n — число значений','2, 4, 6: μ=4, σ = √(8/3) ≈ 1,63.',3,[R`\sigma=\frac{\sum(x_i-\mu)^2}{n}`,R`\sigma=\sqrt{\frac{\sum(x_i-\mu)}{n}}`,R`\sigma=\sqrt{\frac{\sum x_i^2}{n}}`]),
+
+ F(13,'Два множества','Two sets',R`|A\cup B|=|A|+|B|-|A\cap B|`,'Число элементов в объединении двух множеств.','|A| — число элементов в A','В классе 20 любят математику, 15 — физику, 8 — обе: 20+15−8 = 27.',1,[R`|A\cup B|=|A|+|B|`,R`|A\cup B|=|A|+|B|+|A\cap B|`,R`|A\cup B|=|A|\cdot|B|`]),
+ F(13,'Три множества','Three sets',R`|A\cup B\cup C|=|A|+|B|+|C|-|A\cap B|-|A\cap C|-|B\cap C|+|A\cap B\cap C|`,'Включения-исключения для трёх множеств: тройное пересечение прибавляется обратно.','|A∩B∩C| — общие для всех трёх','Чередуйте знаки: +, −, +.',3,[R`|A\cup B\cup C|=|A|+|B|+|C|-|A\cap B|-|A\cap C|-|B\cap C|`,R`|A\cup B\cup C|=|A|+|B|+|C|-|A\cap B\cap C|`,R`|A\cup B\cup C|=|A|+|B|+|C|+|A\cap B\cap C|`]),
+ F(13,'Включения-исключения с «ни в одном»','Total with neither',R`T=a+b-x+z`,'Общее число = группа A + группа B − обе + ни в одной.','a, b — размеры групп, x — в обеих, z — ни в одной','30 учеников: 12 в хоре, 15 в оркестре, 5 в обоих → ни в одной 30−22 = 8.',2,[R`T=a+b+x+z`,R`T=a+b-x-z`,R`T=a+b-x`],'T=a+b-x+z'),
+
+ F(14,'Количество делителей','Number of divisors',R`d=(a+1)(b+1)`,'Если n = pᵃ·qᵇ (p, q — простые), то число делителей равно (a+1)(b+1).','a, b — показатели в разложении на простые','12 = 2²·3¹ → (2+1)(1+1) = 6 делителей.',2,[R`d=ab`,R`d=(a-1)(b-1)`,R`d=a+b+1`],'d=(a+1)*(b+1)'),
+ F(14,'Деление с остатком','Division with remainder',R`n=dq+r,\quad 0\le r<d`,'Любое целое n представимо через делитель d, частное q и остаток r.','d — делитель, q — частное, r — остаток','47 = 5·9 + 2.',1,[R`n=dq-r`,R`n=d+q+r`,R`n=dq+r,\quad 0\le r\le d`],'n=d*q+r'),
+ F(14,'Нули в конце n!','Trailing zeros of n!',R`Z=\sum_{k\ge1}\left\lfloor\frac{n}{5^k}\right\rfloor`,'Число нулей в конце факториала определяется количеством пятёрок в разложении.','⌊ ⌋ — округление вниз','25!: ⌊25/5⌋ + ⌊25/25⌋ = 5 + 1 = 6 нулей.',3,[R`Z=\left\lfloor\frac{n}{10}\right\rfloor`,R`Z=\sum_{k\ge1}\left\lfloor\frac{n}{2^k}\right\rfloor`,R`Z=\frac{n}{5}`]),
+
+ F(15,'Теорема Пифагора','Pythagorean theorem',R`a^2+b^2=c^2`,'В прямоугольном треугольнике квадрат гипотенузы равен сумме квадратов катетов.','a, b — катеты, c — гипотенуза','Катеты 3 и 4 → гипотенуза 5.',1,[R`a+b=c`,R`a^2-b^2=c^2`,R`a^2+b^2=c`],'c=sqrt(a^2+b^2)'),
+ F(15,'Площадь круга','Area of a circle',R`A=\pi r^2`,'Площадь круга радиуса r.','r — радиус','r=3 → A = 9π.',1,[R`A=2\pi r`,R`A=\pi r`,R`A=\pi d^2`],'A=pi*r^2'),
+ F(15,'Расстояние между точками','Distance between points',R`d=\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}`,'Расстояние на координатной плоскости — это теорема Пифагора.','(x₁,y₁), (x₂,y₂) — координаты точек','(1,2) и (4,6): √(9+16) = 5.',2,[R`d=(x_2-x_1)+(y_2-y_1)`,R`d=\sqrt{(x_2+x_1)^2+(y_2+y_1)^2}`,R`d=(x_2-x_1)^2+(y_2-y_1)^2`],'d=sqrt((x_2-x_1)^2+(y_2-y_1)^2)'),
+ F(15,'Объём цилиндра','Volume of a cylinder',R`V=\pi r^2 h`,'Площадь основания, умноженная на высоту.','r — радиус основания, h — высота','r=2, h=5 → V = 20π.',1,[R`V=2\pi r h`,R`V=\frac{1}{3}\pi r^2 h`,R`V=\pi r h^2`],'V=pi*r^2*h'),
+ F(15,'Площадь треугольника','Area of a triangle',R`A=\frac{bh}{2}`,'Половина произведения основания на высоту, опущенную на него.','b — основание, h — высота','b=10, h=6 → 30.',1,[R`A=bh`,R`A=\frac{b+h}{2}`,R`A=\frac{b^2h}{2}`],'A=b*h/2')
+];
+/* ============================ УТИЛИТЫ ============================ */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function T(s, disp){ try{ return `<span class="tex" role="math" aria-label="${esc(s)}">${katex.renderToString(s,{displayMode:!!disp,throwOnError:false,strict:false})}</span>` }catch(e){ return `<code>${esc(s)}</code>` } }
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]} return a };
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const dayKey = (d=new Date()) => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const addDays = (n,d=new Date()) => { const x=new Date(d); x.setDate(x.getDate()+n); return x };
+const dayDiff = (a,b) => Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/864e5);
+const pct = (a,b) => b ? Math.round(a/b*100) : 0;
+const plural = (n,a,b,c) => { n=Math.abs(n)%100; const m=n%10; return n>10&&n<20?c:m>1&&m<5?b:m===1?a:c };
+
+/* ============================ ХРАНИЛИЩЕ ============================ */
+const LS = 'quantdrill-v1';
+const defState = () => ({nick:'Гость',avatar:AVATARS[0],goal:20,newLimit:10,qTime:30,theme:'',legacy:true,exam:'',target:'',
+ xp:0,xpLog:[],streak:0,best:0,goalDay:'',freezes:1,freezeWeek:'',prog:{},answers:[],days:{},newDays:{},bm:[],ach:{},hidden:{},custom:[],reports:[],
+ hideLb:false,sessions:0,totalAnswers:0,topicsSeen:[],stats:{timedDone:0,errorsDone:0,typeOk:0},sess:null,last:null});
+let S;
+function load(){ try{ S = Object.assign(defState(), JSON.parse(localStorage.getItem(LS)||'{}')); S.stats = Object.assign(defState().stats, S.stats) }catch(e){ S = defState() } }
+function save(){ try{ localStorage.setItem(LS, JSON.stringify(S)) }catch(e){} }
+load();
+
+function toast(msg){ const el=document.createElement('div'); el.className='toast'; el.textContent=msg; $('#toasts').append(el); setTimeout(()=>el.remove(),3800) }
+
+/* ============================ КОНТЕНТ ============================ */
+const allF = () => BASE.concat(S.custom);
+const isOn = f => !S.hidden[f.id] && !(TOPICS.find(t=>t.id===f.t)?.legacy && !S.legacy);
+const active = () => allF().filter(isOn);
+const getF = id => allF().find(f=>f.id===id);
+const topicOf = id => TOPICS.find(t=>t.id===id);
+const visTopics = () => TOPICS.filter(t=>!t.legacy||S.legacy);
+const P = id => S.prog[id] || (S.prog[id]={ef:2.5,int:0,rep:0,due:0,lapses:0,last:null,mastered:false,seen:0,ok:0,bad:0});
+const hasAns = f => !!f.ans;
+
+/* ============================ ПРОВЕРКА ВВОДА ФОРМУЛЫ ============================ */
+function tokenize(src){
+ const s=String(src).replace(/[−–]/g,'-').replace(/[×·⋅]/g,'*').replace(/÷/g,'/').replace(/π/g,'pi').replace(/²/g,'^2').replace(/³/g,'^3').replace(/\\cdot/g,'*').replace(/\s+/g,'')
+  .replace(/([a-zA-Z])_\{([a-zA-Z0-9]+)\}/g,'$1_$2').replace(/[{\[]/g,'(').replace(/[}\]]/g,')');
+ const t=[];let i=0;
+ while(i<s.length){
+  const r=s.slice(i);let m;
+  if((m=r.match(/^\d+([.,]\d+)?/))){t.push({k:'n',v:parseFloat(m[0].replace(',','.'))});i+=m[0].length}
+  else if((m=r.match(/^[a-zA-Z]_[a-zA-Z0-9]+/))){t.push({k:'v',v:m[0]});i+=m[0].length}
+  else if((m=r.match(/^(sqrt|abs)/))){t.push({k:'f',v:m[0]});i+=m[0].length}
+  else if(r.startsWith('pi')){t.push({k:'n',v:Math.PI});i+=2}
+  else if(/^[a-zA-Z]/.test(r)){t.push({k:'v',v:r[0]});i++}
+  else if(/^[-+*\/^()=!]/.test(r)){t.push({k:'o',v:r[0]});i++}
+  else throw new Error('Недопустимый символ «'+r[0]+'»');
+ }
+ return t;
+}
+const fact = x => { const r=Math.round(x); if(Math.abs(x-r)>1e-9||r<0||r>20) return NaN; let f=1; for(let i=2;i<=r;i++) f*=i; return f };
+function parseSide(tokens, vars){
+ let p=0;
+ const peek=()=>tokens[p], isOp=v=>peek()&&peek().k==='o'&&peek().v===v;
+ const atomStart=()=>{const t=peek();return t&&(t.k==='n'||t.k==='v'||t.k==='f'||(t.k==='o'&&t.v==='('))};
+ function expr(){let l=term();while(isOp('+')||isOp('-')){const o=tokens[p++].v,a=l,b=term();l=o==='+'?e=>a(e)+b(e):e=>a(e)-b(e)}return l}
+ function term(){let l=unary();for(;;){
+  if(isOp('*')||isOp('/')){const o=tokens[p++].v,a=l,b=unary();l=o==='*'?e=>a(e)*b(e):e=>a(e)/b(e)}
+  else if(atomStart()){const a=l,b=unary();l=e=>a(e)*b(e)} else return l}}
+ function unary(){ if(isOp('-')){p++;const a=unary();return e=>-a(e)} if(isOp('+')){p++;return unary()} return power() }
+ function power(){const b=post();if(isOp('^')){p++;const x=unary();return e=>Math.pow(b(e),x(e))}return b}
+ function post(){let a=atom();while(isOp('!')){p++;const x=a;a=e=>fact(x(e))}return a}
+ function atom(){const t=tokens[p++];if(!t)throw new Error('Выражение оборвано');
+  if(t.k==='n')return()=>t.v;
+  if(t.k==='v'){vars.add(t.v);return e=>e[t.v]}
+  if(t.k==='f'){let x;if(isOp('(')){p++;x=expr();if(!isOp(')'))throw new Error('Не закрыта скобка');p++}else x=post();return t.v==='sqrt'?e=>Math.sqrt(x(e)):e=>Math.abs(x(e))}
+  if(t.k==='o'&&t.v==='('){const x=expr();if(!isOp(')'))throw new Error('Не закрыта скобка');p++;return x}
+  throw new Error('Неожиданный символ «'+t.v+'»')}
+ if(!tokens.length)throw new Error('Пустая часть равенства');
+ const f=expr(); if(p<tokens.length)throw new Error('Лишние символы в выражении'); return f;
+}
+function parseEq(str){
+ const tk=tokenize(str); const idx=[]; tk.forEach((t,i)=>{if(t.k==='o'&&t.v==='=')idx.push(i)});
+ if(idx.length!==1) throw new Error('Нужно ровно одно равенство (знак =)');
+ const vars=new Set(), ls=tk.slice(0,idx[0]), rs=tk.slice(idx[0]+1);
+ return {L:parseSide(ls,vars),R:parseSide(rs,vars),vars,ls:ls.map(t=>t.v).join(''),rs:rs.map(t=>t.v).join('')};
+}
+function checkType(f, input){
+ let U; try{ U=parseEq(input) }catch(e){ return {err:e.message} }
+ const A=parseEq(f.ans), av=[...A.vars];
+ if(av.length!==U.vars.size||av.some(v=>!U.vars.has(v))) return {ok:false,note:'Набор переменных не совпадает (регистр важен).'};
+ const lhs=f.ans.split('=')[0].trim(), lv=/^[a-zA-Z](_[a-zA-Z0-9]+)?$/.test(lhs)?lhs:null;
+ if(!lv && U.ls===U.rs) return {ok:false};
+ const rnd=()=>f.int?2+Math.floor(Math.random()*8):Math.round((1.2+Math.random()*5.5)*100)/100;
+ let good=0;
+ for(let k=0;k<80&&good<5;k++){
+  const env={}; av.forEach(v=>env[v]=rnd()); if(lv) env[lv]=A.R(env);
+  const a=U.L(env), b=U.R(env); if(!isFinite(a)||!isFinite(b)||!isFinite(env[av[0]])) continue;
+  good++; if(Math.abs(a-b)>1e-6*Math.max(1,Math.abs(a),Math.abs(b))) return {ok:false};
+ }
+ if(good<3) return {ok:false};
+ if(lv){ let diff=false; for(let k=0;k<20&&!diff;k++){const env={};av.forEach(v=>env[v]=rnd());const a=U.L(env),b=U.R(env);if(isFinite(a)&&isFinite(b)&&Math.abs(a-b)>1e-6)diff=true} if(!diff) return {ok:false,note:'Равенство тривиально.'} }
+ return {ok:true};
+}
+
+/* ============================ SM-2, XP, УРОВНИ ============================ */
+function sm2(p, q, ok){
+ if(q<3){ p.rep=0; p.int=1; p.lapses++; p.due=Date.now()+10*60000 }
+ else { p.rep++; p.int = p.rep===1?1 : p.rep===2?6 : Math.round(p.int*p.ef); p.due=Date.now()+p.int*864e5 }
+ p.ef=Math.max(1.3, p.ef+0.1-(5-q)*(0.08+(5-q)*0.02));
+ p.mastered = p.rep>=3 && p.int>=6;
+}
+const lvlOf = xp => Math.min(50, 1+Math.floor(Math.pow(xp/40,1/1.6)));
+const lvlAt = L => Math.round(40*Math.pow(L-1,1.6));
+const LVL_NAMES=['Новичок','Ученик','Практик','Счётчик','Аналитик','Стратег','Эксперт','Мастер','Гроссмейстер','Quant Master'];
+const lvlName = L => LVL_NAMES[Math.min(9,Math.floor((L-1)/5))];
+function addXP(n, why){
+ if(n<=0) return; const before=lvlOf(S.xp); S.xp+=n; S.xpLog.push({ts:Date.now(),amt:n,why}); if(S.xpLog.length>3000)S.xpLog.splice(0,500);
+ const after=lvlOf(S.xp); if(after>before) toast(`🎉 Новый уровень ${after}: ${lvlName(after)}!`);
+}
+const today = () => S.days[dayKey()] || {n:0,ok:0,ms:0};
+const dueCount = () => active().filter(f=>{const p=S.prog[f.id];return p&&p.seen&&p.due<=Date.now()}).length;
+const newToday = () => S.newDays[dayKey()]||0;
+function fixStreak(){
+ const d=new Date(), t=dayKey(d), y=dayKey(addDays(-1)), wk=dayKey(addDays(-((d.getDay()+6)%7)));
+ if(S.freezeWeek!==wk){S.freezeWeek=wk;S.freezes=1}
+ if(S.goalDay&&S.goalDay!==t&&S.goalDay!==y){ if(dayDiff(S.goalDay,t)===2&&S.freezes>0){S.freezes--;S.goalDay=y;setTimeout(()=>toast('❄️ Заморозка спасла ваш streak!'),600)} else S.streak=0 }
+ save();
+}
+fixStreak();
+
+/* ============================ ДОСТИЖЕНИЯ ============================ */
+const topicAcc = id => { const a=S.answers.filter(x=>x.t===id); return {n:a.length, ok:a.filter(x=>x.ok).length} };
+const ACH = [
+ {c:'first',em:'👟',n:'Первый шаг',d:'Завершите первую сессию',t:(s,x)=>S.sessions>=1},
+ {c:'streak3',em:'🔥',n:'Три дня подряд',d:'Streak 3 дня',t:()=>S.streak>=3},
+ {c:'week',em:'🏕️',n:'Неделя огня',d:'Streak 7 дней',t:()=>S.streak>=7},
+ {c:'perfect',em:'💎',n:'Без ошибок',d:'Сессия 20 из 20',t:(s)=>s&&s.n>=20&&s.ok===s.n},
+ {c:'pct',em:'％',n:'Мастер процентов',d:'90% точности в теме «Проценты» при ≥30 ответов',t:()=>{const a=topicAcc(2);return a.n>=30&&a.ok/a.n>=.9}},
+ {c:'lightning',em:'⚡',n:'Молния',d:'10 верных подряд быстрее 5 с',t:(s)=>s&&s.fast>=10},
+ {c:'all',em:'🗺️',n:'Все темы',d:'Затроньте все 14 основных тем',t:()=>S.topicsSeen.filter(i=>i!==15).length>=14},
+ {c:'hundred',em:'💯',n:'Сотня',d:'100 ответов',t:()=>S.totalAnswers>=100},
+ {c:'master25',em:'🧠',n:'Коллекционер',d:'Освойте 25 формул',t:()=>Object.values(S.prog).filter(p=>p.mastered).length>=25},
+ {c:'lvl5',em:'⭐',n:'Уровень 5',d:'Достигните 5 уровня',t:()=>lvlOf(S.xp)>=5},
+ {c:'timed',em:'⏱️',n:'Гонщик',d:'Завершите режим «На время»',t:()=>S.stats.timedDone>=1},
+ {c:'typer',em:'⌨️',n:'Каллиграф',d:'20 верных вводов формул',t:()=>S.stats.typeOk>=20},
+ {c:'bookmark',em:'🔖',n:'Закладка',d:'Добавьте формулу в избранное',t:()=>S.bm.length>=1},
+ {c:'fixer',em:'🛠️',n:'Работа над ошибками',d:'Завершите сессию исправления ошибок',t:()=>S.stats.errorsDone>=1}
+];
+function checkAch(ctx){ ACH.forEach(a=>{ if(!S.ach[a.c]&&a.t(ctx)){ S.ach[a.c]=Date.now(); toast(`${a.em} Достижение: ${a.n}`) } }) }
+
+/* ============================ ЗАПИСЬ ОТВЕТА ============================ */
+function record(f, ok, q, ms, kind, hint){
+ const sess=SESS, p=P(f.id); let xp=0, learned=false;
+ const first = p.seen===0;
+ if(first){ p.seen=1; S.newDays[dayKey()]=newToday()+1 }
+ learned = ok && q>=3 && p.rep===0;
+ sm2(p,q,ok); p.last=ok; ok?p.ok++:p.bad++;
+ const base = kind==='card' ? ({1:0,3:4,4:8,5:10}[q]||0) : ok ? (kind==='type'?20-(hint?5:0):10) : 0;
+ const speed = ok&&kind!=='card'&&ms<5000?5:0;
+ if(ok&&q>=3){ sess.combo++; sess.bestCombo=Math.max(sess.bestCombo,sess.combo) } else sess.combo=0;
+ const mult = sess.combo>=10?2:sess.combo>=5?1.5:1;
+ xp = Math.round((base+speed)*mult) + (learned?15:0);
+ xp = Math.max(0, Math.min(xp, 400-sess.xp)); // антифрод: лимит XP за сессию
+ sess.xp+=xp; sess.n++; if(ok)sess.ok++; if(!ok&&!sess.wrong.includes(f.id))sess.wrong.push(f.id);
+ sess.fast = ok&&ms<5000 ? sess.fast+1 : 0; sess.fastBest=Math.max(sess.fastBest||0,sess.fast);
+ sess.log.push({id:f.id,ok});
+ addXP(xp,kind);
+ S.answers.push({id:f.id,t:f.t,ok,ms:Math.min(ms,120000),ts:Date.now(),k:kind,h:hint?1:0}); if(S.answers.length>4000)S.answers.splice(0,500);
+ S.totalAnswers++; if(!S.topicsSeen.includes(f.t))S.topicsSeen.push(f.t);
+ if(kind==='type'&&ok)S.stats.typeOk++;
+ const d=S.days[dayKey()]||(S.days[dayKey()]={n:0,ok:0,ms:0}); d.n++; if(ok)d.ok++; d.ms+=Math.min(ms,120000);
+ // дневная цель и streak
+ if(d.n>=S.goal && S.goalDay!==dayKey()){
+  S.streak=(S.goalDay===dayKey(addDays(-1))?S.streak:0)+1; S.best=Math.max(S.best,S.streak); S.goalDay=dayKey();
+  addXP(50,'goal'); sess.xp+=50; toast(`🎯 Дневная цель выполнена! +50 XP · streak ${S.streak}`);
+ }
+ checkAch(sess);
+ return {xp,learned};
+}
+
+/* ============================ СЕССИИ ============================ */
+let SESS=null, UI={}, cfg={mode:'cards',topics:[],diff:0,count:10,dur:5}, timers=[];
+const MODES={
+ cards:{em:'🃏',n:'Карточки',d:'Переверните и оцените себя'},
+ test:{em:'✅',n:'Тест',d:'4 варианта, мгновенный ответ'},
+ type:{em:'⌨️',n:'Ввод формулы',d:'Напишите формулу сами'},
+ timed:{em:'⏱️',n:'На время',d:'Гонка с комбо-множителем'},
+ smart:{em:'🧠',n:'Умное повторение',d:'Что пора повторить (SM-2)'},
+ errors:{em:'🛠️',n:'Работа над ошибками',d:'Формулы, где вы ошибались'}
+};
+function buildQueue(c){
+ let pool=active().filter(f=>(!c.topics.length||c.topics.includes(f.t))&&(!c.diff||f.diff===c.diff));
+ const now=Date.now(); let items=[];
+ const mk=(f,kind)=>({id:f.id,kind});
+ const mcKind=()=>Math.random()<.5?'mc':'mcr';
+ if(c.mode==='cards'){
+  const sorted=shuffle(pool).sort((a,b)=>{const pa=S.prog[a.id],pb=S.prog[b.id];const da=pa&&pa.seen&&pa.due<=now?0:pa&&pa.seen?2:1;const db=pb&&pb.seen&&pb.due<=now?0:pb&&pb.seen?2:1;return da-db});
+  items=sorted.slice(0,c.count).map(f=>mk(f,'card'));
+ } else if(c.mode==='test') items=shuffle(pool).slice(0,c.count).map(f=>mk(f,mcKind()));
+ else if(c.mode==='type') items=shuffle(pool.filter(hasAns)).slice(0,c.count).map(f=>mk(f,'type'));
+ else if(c.mode==='timed'){
+  items=pool.map(f=>({f,k:f.diff+Math.random()*1.4})).sort((a,b)=>a.k-b.k).map(o=>mk(o.f,hasAns(o.f)&&Math.random()<.4?'type':mcKind()));
+ } else if(c.mode==='smart'){
+  const due=pool.filter(f=>{const p=S.prog[f.id];return p&&p.seen&&p.due<=now}).sort((a,b)=>S.prog[a.id].due-S.prog[b.id].due);
+  const fresh=shuffle(pool.filter(f=>!(S.prog[f.id]&&S.prog[f.id].seen))).slice(0,Math.max(0,S.newLimit-newToday()));
+  items=due.concat(fresh).slice(0,Math.max(c.count,20)).map(f=>mk(f,'card'));
+ } else if(c.mode==='errors'){
+  const bad=pool.filter(f=>{const p=S.prog[f.id];return p&&(p.last===false||p.lapses>0)&&p.seen});
+  items=shuffle(bad).slice(0,c.count).map(f=>mk(f,hasAns(f)&&Math.random()<.4?'type':pick(['mc','mcr','card'])));
+ }
+ return items;
+}
+function startSession(c){
+ c=Object.assign({},c); const items=buildQueue(c);
+ if(!items.length){ toast(c.mode==='smart'?'Пока нечего повторять — выучите новые формулы 🎉':c.mode==='errors'?'Нет формул с ошибками — отлично!':'Нет подходящих формул. Измените фильтры.'); return }
+ SESS=S.sess={mode:c.mode,cfg:c,items,i:0,ok:0,n:0,xp:0,combo:0,bestCombo:0,fast:0,fastBest:0,wrong:[],log:[],start:Date.now(),demo:!!c.demo,left:c.mode==='timed'?c.dur*60:0};
+ save(); UI={}; location.hash='#/train';
+}
+function startDemo(){ startSession({mode:'cards',topics:[],diff:0,count:5,dur:5,demo:true}) }
+
+function makeOpts(item){
+ const f=getF(item.id); const pool=active();
+ if(item.kind==='mc'){
+  const ds=shuffle(f.d).slice(0,3);
+  item.o=shuffle([{x:f.tex,ok:true}].concat(ds.map(x=>({x,ok:false}))));
+ } else {
+  let others=pool.filter(g=>g.id!==f.id&&g.ru!==f.ru); const same=others.filter(g=>g.t===f.t);
+  const dist=shuffle(same).concat(shuffle(others.filter(g=>g.t!==f.t))).slice(0,3);
+  item.o=shuffle([{x:f.ru,ok:true}].concat(dist.map(g=>({x:g.ru,ok:false}))));
+ }
+}
+const cur = () => SESS && SESS.items[SESS.i];
+function resetUI(){
+ UI={flip:false,res:null,hint:false,err:'',t0:Date.now(),qLeft:S.qTime};
+ const it=cur(); if(it&&(it.kind==='mc'||it.kind==='mcr')&&!it.o) makeOpts(it);
+}
+function finishSession(){
+ const s=SESS; stopTimers(); if(!s)return;
+ S.sessions++; if(s.n>=5)addXP(30,'session');
+ if(s.mode==='timed')S.stats.timedDone++; if(s.mode==='errors'&&s.n>0)S.stats.errorsDone++;
+ const acc=pct(s.ok,s.n); const spent=Math.round((Date.now()-s.start)/1000);
+ S.last={mode:s.mode,n:s.n,ok:s.ok,acc,xp:s.xp+(s.n>=5?30:0),best:s.bestCombo,wrong:s.wrong,sec:spent,demo:s.demo,ts:Date.now()};
+ checkAch(s); S.sess=null; SESS=null; save(); location.hash='#/result';
+}
+function nextQ(){
+ if(!SESS)return; SESS.i++; save();
+ if(SESS.i>=SESS.items.length){ if(SESS.mode==='timed'&&SESS.left>0){ finishSession(); return } finishSession(); return }
+ resetUI(); render();
+}
+function stopTimers(){ timers.forEach(clearInterval); timers=[] }
+function startTimers(){
+ stopTimers(); if(!SESS)return;
+ timers.push(setInterval(()=>{
+  if(!SESS||location.hash!=='#/train')return stopTimers();
+  if(SESS.mode==='timed'){
+   SESS.left=Math.max(0,SESS.left-.25); const el=$('#tleft'); if(el)el.textContent=fmt(SESS.left);
+   if(SESS.left<=0){ finishSession(); return }
+   if(!UI.res){ UI.qLeft-=.25; const q=$('#qt'); if(q)q.style.width=Math.max(0,UI.qLeft/S.qTime*100)+'%'; if(UI.qLeft<=0)timeout() }
+  }
+ },250));
+}
+const fmt = s => Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+function timeout(){ const it=cur(),f=getF(it.id); const r=record(f,false,1,S.qTime*1000,it.kind==='card'?'mc':it.kind,false); UI.res={ok:false,xp:r.xp,timeout:true}; render(); setTimeout(()=>{if(UI.res&&UI.res.timeout)nextQ()},1400) }
+function rateCard(q){ if(!SESS||!UI.flip)return; const it=cur(),f=getF(it.id); record(f,q>=3,q,Date.now()-UI.t0,'card',false); nextQ() }
+function pickOpt(i){
+ if(UI.res)return; const it=cur(),f=getF(it.id),o=it.o[i]; if(!o)return; const ms=Date.now()-UI.t0;
+ const q=!o.ok?1:ms<8000?5:ms<20000?4:3; const r=record(f,o.ok,q,ms,'mc',false); UI.res={ok:o.ok,pick:i,xp:r.xp,learned:r.learned};
+ render(); if(SESS&&SESS.mode==='timed')setTimeout(()=>{if(UI.res&&!UI.res.timeout)nextQ()},o.ok?800:1500);
+}
+function submitType(giveUp){
+ if(UI.res)return; const it=cur(),f=getF(it.id), val=($('#typein')||{}).value||'', ms=Date.now()-UI.t0; UI.val=val;
+ let ok=false; if(!giveUp){ const r=checkType(f,val); if(r.err){UI.err=r.err;render();return} ok=r.ok; UI.note=r.note||'' }
+ const q=!ok?1:UI.hint?3:ms<15000?5:4; const r=record(f,ok,q,ms,'type',UI.hint); UI.res={ok,xp:r.xp,learned:r.learned,gave:giveUp}; UI.err='';
+ render(); if(SESS&&SESS.mode==='timed')setTimeout(()=>{if(UI.res&&!UI.res.timeout)nextQ()},ok?900:2200);
+}
+
+/* ============================ ПРЕДСТАВЛЕНИЯ ============================ */
+const NAV=[['#/app','🏠','Главная'],['#/topics','📚','Темы'],['#/setup','🎓','Тренинг'],['#/stats','📊','Статистика'],['#/board','🏆','Рейтинг'],['#/ach','🏅','Награды'],['#/me','👤','Профиль']];
+function renderChrome(route){
+ const L=lvlOf(S.xp), on=h=>route==='/'?false:('#/'+route.split('/')[1])===h||(h==='#/topics'&&(route.startsWith('/topic')||route.startsWith('/f/')))||(h==='#/setup'&&route.startsWith('/train'));
+ const streakOn = S.goalDay===dayKey()||S.goalDay===dayKey(addDays(-1));
+ $('#bar').innerHTML=`<a class="logo" href="#/"><i>∑</i><span>QuantDrill</span></a>
+  <nav class="main" aria-label="Основная навигация">${NAV.map(n=>`<a href="${n[0]}" class="${on(n[0])?'on':''}">${n[2]}</a>`).join('')}</nav><span class="sp"></span>
+  <span class="chip" title="Streak">🔥 ${streakOn?S.streak:0}</span><span class="chip" title="Уровень ${L}: ${lvlName(L)}">⭐ ${L} · ${S.xp} XP</span>
+  <button class="icon-btn" data-act="theme" aria-label="Сменить тему">${document.documentElement.dataset.theme==='dark'?'☀️':'🌙'}</button>`;
+ $('#tabs').innerHTML=[NAV[0],NAV[1],NAV[2],NAV[3],NAV[6]].map(n=>`<a href="${n[0]}" class="${on(n[0])?'on':''}"><b>${n[1]}</b>${n[2]}</a>`).join('');
+}
+function ring(p,sub,main){ const r=50,c=2*Math.PI*r; return `<div class="ring"><svg width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="60" r="${r}" fill="none" stroke="var(--line)" stroke-width="11"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="var(--acc)" stroke-width="11" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-Math.min(1,p))}"/></svg><div class="t"><div><div style="font-size:1.4rem">${main}</div><div class="mut sm" style="font-weight:600">${sub}</div></div></div></div>` }
+
+function vLanding(){
+ const demo=BASE[27]; // сложный процент
+ return `<section class="hero"><div>
+  <span class="tag acc">GMAT Quantitative Reasoning</span>
+  <h1 style="margin-top:12px">Выучи формулы GMAT <span>надолго</span> — за 10 минут в день</h1>
+  <p class="lead">Интервальные повторения подскажут, что пора освежить. Карточки, тесты, ввод формулы и гонка на время — с XP, streak и рейтингом.</p>
+  <div class="row"><button class="btn pri big" data-act="demo">▶ Попробовать без регистрации</button><a class="btn big" href="#/app">Открыть тренажёр</a></div>
+  <p class="mut sm" style="margin-top:12px">Демо — 5 карточек. Прогресс сохраняется в браузере.</p></div>
+  <div class="card float-card c"><span class="tag acc">${esc(topicOf(demo.t).ru)}</span><h3 style="margin-top:10px">${esc(demo.ru)}</h3><div class="bigtex">${T(demo.tex,true)}</div><p class="mut sm" style="margin:8px 0 0">${esc(demo.desc)}</p></div></section>
+ <section style="margin-top:32px"><h2>Четыре режима тренировки</h2><div class="grid g4">
+  ${['cards','test','type','timed'].map(m=>`<div class="card"><div style="font-size:2rem">${MODES[m].em}</div><h3>${MODES[m].n}</h3><p class="mut sm" style="margin:0">${MODES[m].d}</p></div>`).join('')}</div></section>
+ <section style="margin-top:32px"><h2>Почему это работает</h2><div class="grid g3">
+  <div class="card feat"><span class="em">🧠</span><div><h3>Алгоритм SM-2</h3><p class="mut sm" style="margin:0">Система сама решает, какую формулу показать — и когда.</p></div></div>
+  <div class="card feat"><span class="em">🔥</span><div><h3>Привычка</h3><p class="mut sm" style="margin:0">Дневная цель, streak, 14 достижений и уровни до Quant Master.</p></div></div>
+  <div class="card feat"><span class="em">📊</span><div><h3>Видно слабые места</h3><p class="mut sm" style="margin:0">Точность по темам, календарь активности и прогноз готовности.</p></div></div></div></section>
+ <section style="margin-top:32px"><h2>${BASE.length} формул · ${visTopics().length} тем</h2><div class="chips">${visTopics().map(t=>`<a class="pick" style="text-decoration:none;color:inherit" href="#/topic/${t.id}">${t.em} ${esc(t.ru)}</a>`).join('')}</div></section>`;
+}
+
+function vDash(){
+ const t=today(), L=lvlOf(S.xp), lo=lvlAt(L), hi=lvlAt(L+1), due=dueCount(), left=Math.max(0,S.newLimit-newToday());
+ const streakOn=S.goalDay===dayKey()||S.goalDay===dayKey(addDays(-1));
+ const weak=visTopics().map(tp=>({tp,a:topicAcc(tp.id)})).filter(x=>x.a.n>=3).sort((a,b)=>a.a.ok/a.a.n-b.a.ok/b.a.n).slice(0,3);
+ const lb=board('week').slice(0,5);
+ return `<h1 style="font-size:1.8rem">Привет, ${esc(S.nick)} ${esc(S.avatar)}</h1>
+ <div class="grid g2">
+  <div class="card row" style="gap:20px">${ring(t.n/S.goal,'из '+S.goal,t.n)}<div style="flex:1;min-width:180px"><h3>Дневная цель</h3><p class="mut sm">${t.n>=S.goal?'Цель выполнена! 🎉':'Осталось '+(S.goal-t.n)+' '+plural(S.goal-t.n,'ответ','ответа','ответов')}</p>
+   <div class="row"><span class="chip">🔥 Streak ${streakOn?S.streak:0}</span><span class="chip">🏆 Рекорд ${S.best}</span><span class="chip">❄️ ${S.freezes}</span></div></div></div>
+  <div class="card"><div class="row between"><h3 style="margin:0">Уровень ${L} · ${lvlName(L)}</h3><span class="mut sm">${S.xp} XP</span></div><div class="bar-bg" style="margin:12px 0 6px"><i style="width:${L>=50?100:pct(S.xp-lo,hi-lo)}%"></i></div><p class="mut sm" style="margin:0">${L>=50?'Максимальный уровень':'До уровня '+(L+1)+': '+(hi-S.xp)+' XP'}</p></div></div>
+ <div class="grid g2" style="margin-top:16px">
+  <div class="card"><h3>Продолжить</h3>
+   ${S.sess?`<p class="mut sm">Незавершённая сессия: ${esc(MODES[S.sess.mode].n)}, ${S.sess.i}/${S.sess.items.length}</p><button class="btn pri" data-act="resume">▶ Продолжить сессию</button>`
+   :`<p class="mut sm">К повторению: <b>${due}</b> · новых сегодня доступно: <b>${left}</b></p><button class="btn pri big" data-act="quick-smart">🧠 Умное повторение</button>`}</div>
+  <div class="card"><h3>Быстрый старт</h3><div class="grid g2" style="gap:8px">${['cards','test','type','timed'].map(m=>`<button class="btn" data-act="quick" data-m="${m}">${MODES[m].em} ${MODES[m].n}</button>`).join('')}</div></div></div>
+ <div class="grid g2" style="margin-top:16px">
+  <div class="card"><div class="row between"><h3 style="margin:0">Рейтинг недели</h3><a href="#/board" class="sm">Весь →</a></div><table><tbody>${lb.map((r,i)=>`<tr class="${r.me?'me':''}"><td>${i+1}</td><td>${esc(r.av)} ${esc(r.name)}</td><td style="text-align:right">${r.xp} XP</td></tr>`).join('')}</tbody></table></div>
+  <div class="card"><h3>Слабые места</h3>${weak.length?weak.map(x=>`<div class="hrow"><span>${x.tp.em} ${esc(x.tp.ru)}</span><div class="bar-bg"><i style="width:${pct(x.a.ok,x.a.n)}%"></i></div><b>${pct(x.a.ok,x.a.n)}%</b></div>`).join('')+`<a class="btn sm" href="#/setup" data-act="errors-q">🛠️ Работа над ошибками</a>`:'<p class="mut sm">Позанимайтесь немного — и здесь появятся темы, которые стоит подтянуть.</p>'}</div></div>`;
+}
+
+function topicProgress(tid){ const fs=active().filter(f=>f.t===tid); return {n:fs.length, m:fs.filter(f=>S.prog[f.id]&&S.prog[f.id].mastered).length, s:fs.filter(f=>S.prog[f.id]&&S.prog[f.id].seen).length} }
+function vTopics(){
+ return `<h1 style="font-size:1.8rem">Каталог формул</h1>
+ <div class="row" style="margin-bottom:16px"><input type="text" id="q" placeholder="🔍 Поиск по названию, формуле, тегу…" style="flex:1;min-width:220px" aria-label="Поиск"><button class="btn" data-act="bmlist">🔖 Избранное (${S.bm.length})</button></div>
+ <div id="res"></div>
+ <div class="grid g3" id="tgrid">${visTopics().map(t=>{const p=topicProgress(t.id);return `<a class="card topic" href="#/topic/${t.id}"><div class="row between"><span class="em">${t.em}</span>${t.legacy?'<span class="tag leg">Legacy</span>':''}</div><h3 style="margin-top:8px">${esc(t.ru)}</h3><p class="mut sm" style="margin:0 0 10px">${esc(t.en)} · ${p.n} ${plural(p.n,'формула','формулы','формул')}</p><div class="bar-bg"><i style="width:${pct(p.m,p.n)}%"></i></div><p class="mut sm" style="margin:6px 0 0">Освоено ${p.m} из ${p.n}</p></a>`}).join('')}</div>`;
+}
+function fRow(f){ const p=S.prog[f.id]; const cls=!p||!p.seen?'':p.mastered?'m':p.last===false?'b':'l';
+ return `<a href="#/f/${f.id}"><span class="row" style="gap:10px"><span class="dot ${cls}" title="${!p||!p.seen?'не изучено':p.mastered?'освоено':'в процессе'}"></span><span><b>${esc(f.ru)}</b><br><span class="mut sm">${esc(f.en)}</span></span></span><span class="sm">${T(f.tex)}</span></a>` }
+function vTopic(id){
+ const t=topicOf(+id); if(!t)return vNotFound(); const fs=allF().filter(f=>f.t===t.id&&(!S.hidden[f.id])); const p=topicProgress(t.id);
+ return `<p><a href="#/topics">← Все темы</a></p><div class="row between"><h1 style="font-size:1.8rem;margin:0">${t.em} ${esc(t.ru)} ${t.legacy?'<span class="tag leg">Legacy GMAT</span>':''}</h1><button class="btn pri" data-act="train-topic" data-t="${t.id}">🎓 Тренировать тему</button></div>
+ <p class="mut">${esc(t.en)} · освоено ${p.m} из ${p.n}</p>${t.legacy?'<p class="notice">Геометрия исключена из GMAT Focus Edition. Тема оставлена для классического GMAT; отключается в профиле.</p>':''}
+ <div class="card flist">${fs.map(fRow).join('')||'<p class="mut">Пока пусто.</p>'}</div>`;
+}
+function vFormula(id){
+ const f=getF(id); if(!f)return vNotFound(); const t=topicOf(f.t), p=S.prog[f.id], bm=S.bm.includes(f.id);
+ return `<p><a href="#/topic/${f.t}">← ${esc(t.ru)}</a></p>
+ <div class="card"><div class="row between"><div><span class="tag acc">${esc(t.ru)}</span> <span class="tag">${'★'.repeat(f.diff)}${'☆'.repeat(3-f.diff)}</span> ${p&&p.mastered?'<span class="tag ok">Освоено</span>':''}</div>
+  <div class="row"><button class="btn sm" data-act="bm" data-id="${f.id}">${bm?'🔖 В избранном':'☆ В избранное'}</button><button class="btn sm ghost" data-act="report" data-id="${f.id}">⚠️ Ошибка?</button></div></div>
+  <h1 style="font-size:1.7rem;margin-top:14px">${esc(f.ru)}</h1><p class="mut">${esc(f.en)}</p>
+  <div class="bigtex c" style="padding:18px 0;overflow-x:auto">${T(f.tex,true)}</div>
+  <h3>Когда применять</h3><p>${esc(f.desc)}</p><h3>Переменные</h3><p class="vars">${esc(f.w||'—')}</p><h3>Пример</h3><p>${esc(f.ex||'—')}</p>
+  ${f.mist?`<h3>Типичная ошибка</h3><p class="notice">${esc(f.mist)}</p>`:''}
+  ${p&&p.seen?`<p class="mut sm">Повторений подряд: ${p.rep} · интервал ${p.int} дн. · ошибок ${p.lapses} · следующее: ${p.due<=Date.now()?'сейчас':new Date(p.due).toLocaleDateString('ru-RU')}</p>`:''}
+  <div class="row" style="margin-top:10px"><button class="btn pri" data-act="train-one" data-id="${f.id}">🃏 Потренировать эту формулу</button></div></div>`;
+}
+function vNotFound(){ return `<div class="card c"><h2>Страница не найдена</h2><a class="btn pri" href="#/app">На главную</a></div>` }
+
+function vSetup(){
+ const n=buildQueue(Object.assign({},cfg,{count:999})).length;
+ return `<h1 style="font-size:1.8rem">Настройка сессии</h1><div class="grid g2">
+ <div class="card"><h3>Режим</h3><div class="grid" style="gap:10px">${Object.entries(MODES).map(([k,m])=>`<button class="mode ${cfg.mode===k?'on':''}" data-act="mode" data-m="${k}"><span class="em">${m.em}</span> <b>${m.n}</b><br><span class="mut sm">${m.d}</span></button>`).join('')}</div></div>
+ <div class="card"><h3>Темы</h3><div class="chips"><button class="pick ${!cfg.topics.length?'on':''}" data-act="topic-all">Все</button>${visTopics().map(t=>`<button class="pick ${cfg.topics.includes(t.id)?'on':''}" data-act="topic-t" data-t="${t.id}">${t.em} ${esc(t.ru)}</button>`).join('')}</div>
+  <label class="f">Сложность</label><div class="seg">${[[0,'Любая'],[1,'★'],[2,'★★'],[3,'★★★']].map(d=>`<button class="${cfg.diff===d[0]?'on':''}" data-act="diff" data-d="${d[0]}">${d[1]}</button>`).join('')}</div>
+  ${cfg.mode==='timed'?`<label class="f">Длительность</label><div class="seg">${[2,5,10].map(d=>`<button class="${cfg.dur===d?'on':''}" data-act="dur" data-d="${d}">${d} мин</button>`).join('')}</div>`
+  :cfg.mode!=='smart'?`<label class="f">Количество</label><div class="seg">${[10,15,20].map(d=>`<button class="${cfg.count===d?'on':''}" data-act="count" data-d="${d}">${d}</button>`).join('')}</div>`:''}
+  <p class="mut sm" style="margin-top:16px">Подходящих формул: <b>${cfg.mode==='type'?buildQueue(Object.assign({},cfg,{count:999})).length:n}</b>${cfg.mode==='type'?' (только с проверяемым вводом)':''}</p>
+  <button class="btn pri big" data-act="start" style="width:100%">Начать →</button>
+  ${S.sess?`<button class="btn" style="width:100%;margin-top:10px" data-act="resume">▶ Продолжить прошлую сессию</button>`:''}</div></div>`;
+}
+
+function vTrain(){
+ if(!SESS){ if(S.sess){ SESS=S.sess } else return `<div class="card c"><h2>Нет активной сессии</h2><a class="btn pri" href="#/setup">Настроить тренировку</a></div>` }
+ const it=cur(); if(!it){ finishSession(); return '' } if(!UI.t0) resetUI();
+ const f=getF(it.id); if(!f){ SESS.i++; resetUI(); return vTrain() }
+ const total=SESS.items.length, timed=SESS.mode==='timed', t=topicOf(f.t), res=UI.res;
+ let top=`<div class="tr-top"><button class="btn sm ghost" data-act="exit" aria-label="Выйти с сохранением">✕ Выйти</button>
+  <div class="bar-bg"><i style="width:${timed?pct(SESS.left,SESS.cfg.dur*60):pct(SESS.i,total)}%"></i></div>
+  <span class="chip timer">${timed?`⏱ <span id="tleft">${fmt(SESS.left)}</span>`:`${SESS.i+1}/${total}`}</span>
+  ${SESS.combo>=3?`<span class="chip">🔥 ×${SESS.combo>=10?2:SESS.combo>=5?1.5:1} · ${SESS.combo}</span>`:''}</div>${timed?`<div class="qt"><i id="qt" style="width:${Math.max(0,UI.qLeft/S.qTime*100)}%"></i></div>`:''}`;
+ let body='';
+ if(it.kind==='card'){
+  body = UI.flip
+  ? `<div class="card q flip" id="fc"><span class="tag acc" style="align-self:center">${esc(t.ru)}</span><div class="bigtex" style="margin:14px 0;overflow-x:auto">${T(f.tex,true)}</div><p class="vars" style="margin:0 0 6px">${esc(f.w||'')}</p><p class="sm" style="margin:0"><b>Пример:</b> ${esc(f.ex||'')}</p></div>
+     <div class="rates"><button class="r1" data-act="rate" data-q="1">1 · Не знал</button><button class="r2" data-act="rate" data-q="3">2 · Трудно</button><button class="r3" data-act="rate" data-q="4">3 · Знал</button><button class="r4" data-act="rate" data-q="5">4 · Легко</button></div>
+     <p class="mut sm c" style="margin-top:8px">Клавиши 1–4 · на телефоне: свайп ← «не знал», → «знал»</p>`
+  : `<div class="card q flip" id="fc" role="button" tabindex="0" aria-label="Перевернуть карточку"><span class="tag acc" style="align-self:center">${esc(t.ru)}</span><h2 style="margin-top:14px">${esc(f.ru)}</h2><p class="mut">${esc(f.en)}</p><p>${esc(f.desc)}</p><p class="mut sm" style="margin:12px 0 0">Вспомните формулу, затем нажмите — или пробел</p></div>`;
+ } else if(it.kind==='mc'||it.kind==='mcr'){
+  const q=it.kind==='mc'?`<span class="tag acc">${esc(t.ru)}</span><h2 style="margin-top:10px">${esc(f.ru)}</h2><p class="mut" style="margin:0">Какая формула соответствует этому правилу?</p>`
+   :`<span class="tag acc">${esc(t.ru)}</span><p class="mut" style="margin:10px 0 0">Как называется эта формула?</p><div class="bigtex c" style="padding:10px 0;overflow-x:auto">${T(f.tex,true)}</div>`;
+  body=`<div class="card q">${q}<div class="opts">${it.o.map((o,i)=>`<button class="opt ${res?(o.ok?'ok':res.pick===i?'bad':''):''}" data-act="opt" data-i="${i}" ${res?'disabled':''}><kbd>${i+1}</kbd><span>${it.kind==='mc'?T(o.x):esc(o.x)}</span></button>`).join('')}</div>${feedback(f,res)}</div>`;
+ } else {
+  body=`<div class="card q"><span class="tag acc">${esc(t.ru)}</span><h2 style="margin-top:10px">${esc(f.ru)}</h2><p class="mut">${esc(f.en)} — запишите формулу равенством.</p>
+  <input type="text" id="typein" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="например: a^2 + b^2 = c^2" value="${esc(UI.val||'')}" ${res?'disabled':''} aria-label="Ваш ответ">
+  <p class="mut sm" style="margin:6px 0">Синтаксис: <code>^</code> степень, <code>*</code> или пробел — умножение, <code>sqrt(x)</code>, <code>pi</code>, <code>n!</code>, индексы <code>a_1</code>, <code>x_max</code>. Допустимы любые равносильные записи.</p>
+  ${UI.err?`<p class="notice">${esc(UI.err)}</p>`:''}${UI.hint&&!res?`<p class="notice">💡 Переменные: ${[...parseEq(f.ans).vars].map(esc).join(', ')} · ${esc(f.w||'')}</p>`:''}
+  ${res?'':`<div class="row" style="margin-top:8px"><button class="btn pri" data-act="submit">Проверить ↵</button><button class="btn" data-act="hint" ${UI.hint?'disabled':''}>💡 Подсказка (−5 XP)</button><button class="btn ghost" data-act="giveup">Не знаю</button></div>`}${feedback(f,res)}</div>`;
+ }
+ return `<div class="train">${top}${body}</div>`;
+}
+function feedback(f,res){
+ if(!res)return '';
+ const head=res.timeout?'⏰ Время вышло':res.ok?'✅ Верно!':res.gave?'Правильный ответ':'❌ Неверно';
+ return `<div class="fb ${res.ok?'ok':'bad'}"><div class="row between"><b>${head}</b><span>${res.xp?`+${res.xp} XP${res.learned?' · новая формула!':''}`:''}</span></div>
+ ${res.ok?'':`<div class="in bigtex" style="margin:8px 0;overflow-x:auto">${T(f.tex,true)}</div>`}<div class="in sm">${esc(f.desc)}</div>${f.mist&&!res.ok?`<div class="in sm" style="margin-top:6px">⚠️ ${esc(f.mist)}</div>`:''}
+ ${SESS&&SESS.mode==='timed'?'':`<button class="btn pri" style="margin-top:12px" data-act="next">Далее ↵</button>`}</div>`;
+}
+
+function vResult(){
+ const r=S.last; if(!r)return `<div class="card c"><h2>Нет данных</h2><a class="btn pri" href="#/setup">Начать</a></div>`;
+ const wrong=r.wrong.map(getF).filter(Boolean), L=lvlOf(S.xp);
+ const me=boardRank('week');
+ return `<div class="train"><div class="card c"><div style="font-size:3rem">${r.acc>=90?'🏆':r.acc>=70?'👏':'💪'}</div><h1 style="font-size:1.8rem">${r.demo?'Демо пройдено!':'Сессия завершена'}</h1><p class="mut">${esc(MODES[r.mode].n)}</p>
+  <div class="grid g4" style="margin:18px 0"><div class="stat"><div class="n">${r.acc}%</div><div class="l">точность</div></div><div class="stat"><div class="n">${r.ok}/${r.n}</div><div class="l">верно</div></div><div class="stat"><div class="n">+${r.xp}</div><div class="l">XP</div></div><div class="stat"><div class="n">${fmt(r.sec)}</div><div class="l">время</div></div></div>
+  <p class="mut sm">Лучшая серия: ${r.best} · Уровень ${L} · Место в недельном рейтинге: ${me||'скрыт'}</p>
+  <div class="row" style="justify-content:center"><a class="btn pri" href="#/setup">Ещё сессия</a><a class="btn" href="#/app">На главную</a>${r.demo?'<a class="btn" href="#/topics">Каталог формул</a>':''}</div></div>
+  ${wrong.length?`<div class="card" style="margin-top:16px"><h3>Разбор ошибок</h3><div class="flist">${wrong.map(fRow).join('')}</div></div>`:''}</div>`;
+}
+
+function vStats(){
+ const range=UI.range||7, now=new Date(); const ans=S.answers;
+ const topics=visTopics().map(t=>{const a=topicAcc(t.id),p=topicProgress(t.id);const cov=p.n?p.s/p.n:0;const ready=a.n?Math.round((a.ok/a.n*.6+p.m/Math.max(1,p.n)*.4)*100*(0.5+cov/2)):0;return {t,a,p,ready}});
+ const days=[...Array(range)].map((_,i)=>{const k=dayKey(addDays(i-range+1));const d=S.days[k];return {k,n:d?d.n:0,acc:d&&d.n?d.ok/d.n:null}});
+ const tot=ans.length, ok=ans.filter(a=>a.ok).length, avg=tot?Math.round(ans.reduce((s,a)=>s+a.ms,0)/tot/100)/10:0;
+ const mastered=Object.values(S.prog).filter(p=>p.mastered).length;
+ const bad={}; ans.filter(a=>!a.ok).forEach(a=>bad[a.id]=(bad[a.id]||0)+1);
+ const probs=Object.entries(bad).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([id,n])=>({f:getF(id),n})).filter(x=>x.f);
+ const W=320,H=110, pts=days.map((d,i)=>d.acc===null?null:[i/(range-1)*W,H-d.acc*H]);
+ const line=pts.filter(Boolean).map(p=>p.join(',')).join(' ');
+ const wk=[...Array(18*7)].map((_,i)=>{const d=addDays(i-18*7+1);const k=dayKey(d);return {k,n:(S.days[k]||{}).n||0}});
+ const lv=n=>n===0?'':n<5?'l1':n<10?'l2':n<20?'l3':'l4';
+ return `<h1 style="font-size:1.8rem">Статистика</h1>
+ <div class="grid g4"><div class="card stat"><div class="n">${tot}</div><div class="l">ответов</div></div><div class="card stat"><div class="n">${pct(ok,tot)}%</div><div class="l">точность</div></div><div class="card stat"><div class="n">${avg}с</div><div class="l">среднее время</div></div><div class="card stat"><div class="n">${mastered}</div><div class="l">формул освоено</div></div></div>
+ <div class="grid g2" style="margin-top:16px">
+  <div class="card"><h3>Точность по темам</h3>${topics.map(x=>`<div class="hrow"><span>${x.t.em} ${esc(x.t.ru)}</span><div class="bar-bg"><i style="width:${x.a.n?pct(x.a.ok,x.a.n):0}%"></i></div><b>${x.a.n?pct(x.a.ok,x.a.n)+'%':'—'}</b></div>`).join('')}</div>
+  <div class="card"><div class="row between"><h3 style="margin:0">Динамика точности</h3><div class="seg"><button class="${range===7?'on':''}" data-act="range" data-d="7">7 дн.</button><button class="${range===30?'on':''}" data-act="range" data-d="30">30 дн.</button></div></div>
+   ${line?`<svg viewBox="-6 -6 ${W+12} ${H+12}" style="width:100%;margin-top:14px" role="img" aria-label="График точности"><line x1="0" y1="${H/2}" x2="${W}" y2="${H/2}" stroke="var(--line)" stroke-dasharray="4"/><polyline points="${line}" fill="none" stroke="var(--acc)" stroke-width="3" stroke-linejoin="round"/>${pts.filter(Boolean).map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="var(--acc)"/>`).join('')}</svg><p class="mut sm" style="margin:4px 0 0">Ответов за период: ${days.reduce((s,d)=>s+d.n,0)}</p>`:'<p class="mut" style="margin-top:14px">Нет данных за период.</p>'}</div></div>
+ <div class="card" style="margin-top:16px"><h3>Календарь активности</h3><div class="hm" aria-label="Тепловая карта">${wk.map(d=>`<i class="${lv(d.n)}" title="${d.k}: ${d.n}"></i>`).join('')}</div></div>
+ <div class="grid g2" style="margin-top:16px"><div class="card"><h3>Проблемные формулы</h3>${probs.length?`<div class="flist">${probs.map(x=>`<a href="#/f/${x.f.id}"><span><b>${esc(x.f.ru)}</b></span><span class="tag bad">${x.n} ${plural(x.n,'ошибка','ошибки','ошибок')}</span></a>`).join('')}</div>`:'<p class="mut">Ошибок пока нет.</p>'}</div>
+  <div class="card"><h3>Прогноз готовности</h3><p class="mut sm">Оценка по точности и доле освоенных формул.</p>${topics.filter(x=>x.a.n).map(x=>`<div class="hrow"><span>${x.t.em} ${esc(x.t.ru)}</span><div class="bar-bg"><i style="width:${x.ready}%"></i></div><b>${x.ready}%</b></div>`).join('')||'<p class="mut">Начните тренироваться.</p>'}</div></div>`;
+}
+
+/* --- рейтинг: остальные участники симулированы --- */
+const BOTS=['Алия','Данияр','Мадина','Тимур','Аружан','Ерлан','Софья','Артём','Камила','Нурлан','Айдана','Максим','Дана','Руслан','Милана','Ильяс','Ксения','Бекзат','Лейла','Олег','Зарина','Павел','Асель','Игорь','Сабина','Денис','Томирис','Антон','Жанар','Виктор','Аян','Лиза','Марат','Салтанат','Георгий','Диляра','Кирилл','Назгуль','Андрей','Инна','Арман','Полина','Султан','Вера','Тамерлан','Яна','Аскар','Мария','Дамир','Ева'];
+function rng(seed){ return ()=>{ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return((t^t>>>14)>>>0)/4294967296 } }
+function weekStart(){ const d=new Date(); return Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()-((d.getUTCDay()+6)%7)) }
+function board(kind){
+ const r=rng(kind==='week'?Math.floor(weekStart()/864e5):7), av=AVATARS;
+ const rows=BOTS.map((n,i)=>({name:n,av:av[i%av.length],xp:kind==='week'?Math.floor(60+r()*r()*1500):Math.floor(500+r()*r()*24000),me:false}));
+ const mine=kind==='week'?S.xpLog.filter(x=>x.ts>=weekStart()).reduce((s,x)=>s+x.amt,0):S.xp;
+ if(!S.hideLb) rows.push({name:S.nick,av:S.avatar,xp:mine,me:true});
+ return rows.sort((a,b)=>b.xp-a.xp);
+}
+function boardRank(kind){ const i=board(kind).findIndex(r=>r.me); return i<0?0:i+1 }
+function vBoard(){
+ const kind=UI.lb||'week', rows=board(kind), i=rows.findIndex(r=>r.me);
+ return `<div class="row between"><h1 style="font-size:1.8rem;margin:0">Рейтинг</h1><div class="seg"><button class="${kind==='week'?'on':''}" data-act="lb" data-k="week">Неделя</button><button class="${kind==='all'?'on':''}" data-act="lb" data-k="all">Всё время</button></div></div>
+ <p class="notice" style="margin:14px 0">Демо: остальные участники — симуляция. В боевой версии рейтинг считается на сервере по XP, с антифродом.</p>
+ <div class="card"><table><thead><tr><th>#</th><th>Игрок</th><th style="text-align:right">XP</th></tr></thead><tbody>
+ ${rows.slice(0,50).map((r,k)=>`<tr class="${r.me?'me':''}"><td>${k===0?'🥇':k===1?'🥈':k===2?'🥉':k+1}</td><td>${esc(r.av)} ${esc(r.name)}</td><td style="text-align:right">${r.xp}</td></tr>`).join('')}</tbody></table>
+ ${S.hideLb?'<p class="mut sm">Вы скрыты из рейтинга (см. профиль).</p>':i>=50?`<p class="b">Ваша позиция: ${i+1}</p>`:''}</div>`;
+}
+function vAch(){
+ const got=Object.keys(S.ach).length;
+ return `<h1 style="font-size:1.8rem">Достижения <span class="mut" style="font-size:1rem">${got}/${ACH.length}</span></h1><div class="grid g3">${ACH.map(a=>`<div class="card ach ${S.ach[a.c]?'':'lock'}"><div class="em">${a.em}</div><h3>${a.n}</h3><p class="mut sm" style="margin:0">${a.d}</p>${S.ach[a.c]?`<p class="sm" style="margin:8px 0 0;color:var(--ok)">✓ ${new Date(S.ach[a.c]).toLocaleDateString('ru-RU')}</p>`:''}</div>`).join('')}</div>`;
+}
+function vMe(){
+ const tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
+ return `<h1 style="font-size:1.8rem">Профиль и настройки</h1><div class="grid g2">
+ <div class="card"><h3>Профиль</h3><label class="f" for="nick">Никнейм</label><input type="text" id="nick" maxlength="20" value="${esc(S.nick)}">
+  <label class="f">Аватар</label><div class="chips">${AVATARS.map(a=>`<button class="pick ${S.avatar===a?'on':''}" data-act="avatar" data-a="${a}" style="font-size:1.3rem">${a}</button>`).join('')}</div>
+  <label class="f" for="exam">Дата экзамена</label><input type="date" id="exam" value="${esc(S.exam)}">${S.exam?`<p class="mut sm" style="margin:6px 0 0">${Math.max(0,dayDiff(dayKey(),S.exam))} дн. до экзамена</p>`:''}
+  <label class="f" for="target">Целевой балл (необязательно)</label><input type="number" id="target" min="205" max="805" step="5" value="${esc(S.target)}">
+  <p class="mut sm" style="margin-top:10px">Часовой пояс: ${esc(tz)}</p></div>
+ <div class="card"><h3>Обучение</h3><label class="f">Дневная цель (ответов)</label><div class="seg">${[10,20,40].map(n=>`<button class="${S.goal===n?'on':''}" data-act="goal" data-n="${n}">${n}</button>`).join('')}</div>
+  <label class="f">Новых формул в день</label><div class="seg">${[5,10,20].map(n=>`<button class="${S.newLimit===n?'on':''}" data-act="newlimit" data-n="${n}">${n}</button>`).join('')}</div>
+  <label class="f">Таймер вопроса («На время»)</label><div class="seg">${[20,30,45].map(n=>`<button class="${S.qTime===n?'on':''}" data-act="qtime" data-n="${n}">${n} с</button>`).join('')}</div>
+  <label class="f">Тема оформления</label><div class="seg">${[['','Авто'],['light','Светлая'],['dark','Тёмная']].map(x=>`<button class="${S.theme===x[0]?'on':''}" data-act="themeset" data-v="${x[0]}">${x[1]}</button>`).join('')}</div>
+  <label class="f"><input type="checkbox" id="legacy" ${S.legacy?'checked':''}> Показывать «Геометрию» (Legacy GMAT)</label>
+  <label class="f"><input type="checkbox" id="hidelb" ${S.hideLb?'checked':''}> Скрыть меня из рейтинга</label></div></div>
+ <div class="card" style="margin-top:16px"><h3>Данные</h3><p class="mut sm">Всё хранится локально в этом браузере. Вы можете выгрузить или удалить данные.</p>
+  <div class="row"><button class="btn" data-act="export">⬇ Экспорт данных (JSON)</button><button class="btn" data-act="import">⬆ Импорт</button><button class="btn" style="color:var(--bad)" data-act="reset">🗑 Удалить прогресс</button><a class="btn ghost" href="#/admin">⚙️ Админ-панель</a></div>
+  <input type="file" id="impfile" accept="application/json" hidden></div>`;
+}
+
+function vAdmin(){
+ const edit=UI.edit||{};
+ return `<p><a href="#/me">← Профиль</a></p><h1 style="font-size:1.8rem">Админ-панель (демо)</h1>
+ <p class="notice">Локальная версия: изменения применяются только в этом браузере. В боевой версии здесь — CRUD в БД с ролями.</p>
+ <div class="grid g2" style="margin-top:16px">
+  <div class="card"><h3>Новая формула</h3>
+   <label class="f">Тема</label><select id="a_t">${TOPICS.map(t=>`<option value="${t.id}">${esc(t.ru)}</option>`).join('')}</select>
+   <label class="f">Название (рус.)</label><input type="text" id="a_ru"><label class="f">Термин (англ.)</label><input type="text" id="a_en">
+   <label class="f">LaTeX формулы</label><input type="text" id="a_tex" placeholder="a^2+b^2=c^2"><div id="a_prev" class="bigtex c" style="min-height:56px;padding:8px 0"></div>
+   <label class="f">Описание</label><textarea id="a_desc"></textarea><label class="f">Переменные</label><input type="text" id="a_w"><label class="f">Пример</label><input type="text" id="a_ex">
+   <label class="f">Сложность</label><select id="a_diff"><option>1</option><option>2</option><option>3</option></select>
+   <label class="f">Дистракторы (LaTeX, по одному в строке, 3–5)</label><textarea id="a_d"></textarea>
+   <label class="f">Ответ для режима ввода (необязательно, напр. c=sqrt(a^2+b^2))</label><input type="text" id="a_ans">
+   <button class="btn pri" data-act="addf" style="margin-top:14px">Добавить</button></div>
+  <div class="card"><h3>Контент</h3><div class="row" style="margin-bottom:10px"><button class="btn sm" data-act="exp-c">⬇ Экспорт кастомных (JSON)</button><button class="btn sm" data-act="imp-c">⬆ Импорт</button></div><input type="file" id="cfile" accept="application/json" hidden>
+   <p class="mut sm">Скрытая формула не попадает в тренировки (is_published = false).</p>
+   <div style="max-height:420px;overflow:auto" class="flist">${allF().map(f=>`<div style="display:flex;gap:8px;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)"><span class="sm"><b>${esc(f.ru)}</b>${f.custom?' <span class="tag acc">своя</span>':''}</span><span class="row" style="gap:6px"><button class="btn sm" data-act="pub" data-id="${f.id}">${S.hidden[f.id]?'🚫 Скрыта':'👁 Опубл.'}</button>${f.custom?`<button class="btn sm" data-act="delf" data-id="${f.id}">🗑</button>`:''}</span></div>`).join('')}</div></div></div>
+ ${S.reports.length?`<div class="card" style="margin-top:16px"><h3>Сообщения об ошибках (${S.reports.length})</h3>${S.reports.map(r=>`<p class="sm"><b>${esc((getF(r.id)||{}).ru||r.id)}</b>: ${esc(r.text)}</p>`).join('')}</div>`:''}`;
+}
+
+/* ============================ РОУТЕР ============================ */
+function render(){
+ stopTimers();
+ const h=(location.hash.slice(1)||'/'), [,a,b]=h.split('/'), route=h;
+ let html;
+ switch(a){
+  case undefined: case '': html=vLanding(); break;
+  case 'app': html=vDash(); break; case 'topics': html=vTopics(); break; case 'topic': html=vTopic(b); break; case 'f': html=vFormula(b); break;
+  case 'setup': html=vSetup(); break; case 'train': html=vTrain(); break; case 'result': html=vResult(); break;
+  case 'stats': html=vStats(); break; case 'board': html=vBoard(); break; case 'ach': html=vAch(); break; case 'me': html=vMe(); break; case 'admin': html=vAdmin(); break;
+  default: html=vNotFound();
+ }
+ $('#app').innerHTML=html; renderChrome(route);
+ if(a==='train'&&SESS){ startTimers(); const ti=$('#typein'); if(ti&&!UI.res)ti.focus() }
+ if(a==='topics')bindSearch(); if(a==='admin')bindAdminPrev();
+ if(a==='train'&&SESS)bindSwipe();
+}
+window.addEventListener('hashchange',()=>{ if(location.hash!=='#/train'&&SESS){ S.sess=SESS; save() } window.scrollTo(0,0); render() });
+
+/* ============================ ПОИСК / ПРОЧЕЕ ============================ */
+function bindSearch(){
+ const q=$('#q'); if(!q)return;
+ q.oninput=()=>{ const v=q.value.trim().toLowerCase(); const res=$('#res'), g=$('#tgrid');
+  if(!v){res.innerHTML='';g.style.display='';return} g.style.display='none';
+  const m=active().filter(f=>(f.ru+' '+f.en+' '+f.desc+' '+(topicOf(f.t)||{}).ru).toLowerCase().includes(v));
+  res.innerHTML=`<div class="card flist">${m.map(fRow).join('')||'<p class="mut">Ничего не найдено.</p>'}</div>` };
+}
+function bindAdminPrev(){ const i=$('#a_tex'); if(i)i.oninput=()=>{$('#a_prev').innerHTML=T(i.value,true)} }
+function bindSwipe(){
+ const el=$('#fc'); if(!el)return; let x0=null;
+ el.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
+ el.addEventListener('touchend',e=>{ if(x0===null)return; const dx=e.changedTouches[0].clientX-x0; x0=null;
+  if(Math.abs(dx)>70){ if(UI.flip) rateCard(dx>0?4:1) } else if(!UI.flip){UI.flip=true;render()} });
+ if(!('ontouchstart' in window)) el.addEventListener('click',()=>{ if(!UI.flip){UI.flip=true;render()} });
+}
+function download(name,obj){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:'application/json'})); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),500) }
+function applyTheme(){ const t=S.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'); document.documentElement.dataset.theme=t }
+
+/* ============================ СОБЫТИЯ ============================ */
+document.addEventListener('click',e=>{
+ const el=e.target.closest('[data-act]'); if(!el)return; const d=el.dataset, act=d.act;
+ const go=()=>render();
+ switch(act){
+  case 'theme': S.theme=document.documentElement.dataset.theme==='dark'?'light':'dark'; applyTheme(); save(); render(); break;
+  case 'themeset': S.theme=d.v; applyTheme(); save(); render(); break;
+  case 'demo': startDemo(); break;
+  case 'resume': if(S.sess){SESS=S.sess;UI={};resetUI();location.hash='#/train';render()} break;
+  case 'quick-smart': startSession({mode:'smart',topics:[],diff:0,count:20,dur:5}); break;
+  case 'quick': startSession({mode:d.m,topics:[],diff:0,count:10,dur:5}); break;
+  case 'errors-q': cfg.mode='errors'; break;
+  case 'mode': cfg.mode=d.m; go(); break;
+  case 'topic-all': cfg.topics=[]; go(); break;
+  case 'topic-t': { const t=+d.t; cfg.topics=cfg.topics.includes(t)?cfg.topics.filter(x=>x!==t):cfg.topics.concat(t); go(); break }
+  case 'diff': cfg.diff=+d.d; go(); break; case 'count': cfg.count=+d.d; go(); break; case 'dur': cfg.dur=+d.d; go(); break;
+  case 'start': startSession(cfg); break;
+  case 'train-topic': cfg.topics=[+d.t]; cfg.mode='cards'; location.hash='#/setup'; break;
+  case 'train-one': startSession({mode:'cards',topics:[],diff:0,count:1,dur:5,only:d.id}); if(SESS&&SESS.cfg.only){} break;
+  case 'exit': if(SESS){S.sess=SESS;save()} SESS=null; location.hash='#/app'; break;
+  case 'rate': rateCard(+d.q); break;
+  case 'opt': pickOpt(+d.i); break;
+  case 'submit': submitType(false); break;
+  case 'giveup': submitType(true); break;
+  case 'hint': UI.hint=true; render(); break;
+  case 'next': nextQ(); break;
+  case 'range': UI.range=+d.d; go(); break;
+  case 'lb': UI.lb=d.k; go(); break;
+  case 'bm': { const i=S.bm.indexOf(d.id); i<0?S.bm.push(d.id):S.bm.splice(i,1); checkAch(); save(); go(); break }
+  case 'bmlist': { const m=S.bm.map(getF).filter(Boolean); $('#tgrid').style.display='none'; $('#res').innerHTML=`<div class="card flist"><h3>Избранное</h3>${m.map(fRow).join('')||'<p class="mut">Пока пусто. Добавляйте формулы закладкой на их странице.</p>'}</div>`; break }
+  case 'report': { const t=prompt('Что не так с этой формулой?'); if(t){S.reports.push({id:d.id,text:t,ts:Date.now()});save();toast('Спасибо! Сообщение отправлено редактору.')} break }
+  case 'avatar': S.avatar=d.a; save(); go(); break;
+  case 'goal': S.goal=+d.n; save(); go(); break; case 'newlimit': S.newLimit=+d.n; save(); go(); break; case 'qtime': S.qTime=+d.n; save(); go(); break;
+  case 'export': download('quantdrill-data.json',S); break;
+  case 'import': $('#impfile').click(); break;
+  case 'reset': if(confirm('Удалить весь прогресс? Действие необратимо.')){ localStorage.removeItem(LS); SESS=null; load(); fixStreak(); applyTheme(); toast('Данные удалены'); render() } break;
+  case 'addf': addFormula(); break;
+  case 'pub': S.hidden[d.id]?delete S.hidden[d.id]:S.hidden[d.id]=1; save(); go(); break;
+  case 'delf': if(confirm('Удалить формулу?')){S.custom=S.custom.filter(f=>f.id!==d.id);save();go()} break;
+  case 'exp-c': download('custom-formulas.json',S.custom); break;
+  case 'imp-c': $('#cfile').click(); break;
+ }
+});
+document.addEventListener('change',e=>{
+ const t=e.target;
+ if(t.id==='nick'){ S.nick=t.value.trim().slice(0,20)||'Гость'; save(); renderChrome(location.hash.slice(1)) }
+ if(t.id==='exam'){ S.exam=t.value; save(); render() } if(t.id==='target'){ S.target=t.value; save() }
+ if(t.id==='legacy'){ S.legacy=t.checked; save() } if(t.id==='hidelb'){ S.hideLb=t.checked; save() }
+ if(t.id==='impfile'&&t.files[0]) t.files[0].text().then(x=>{ try{ const o=JSON.parse(x); if(typeof o!=='object'||!('xp' in o))throw 0; S=Object.assign(defState(),o); save(); fixStreak(); applyTheme(); toast('Данные импортированы'); render() }catch(err){ toast('Не удалось прочитать файл') } });
+ if(t.id==='cfile'&&t.files[0]) t.files[0].text().then(x=>{ try{ const a=JSON.parse(x); if(!Array.isArray(a))throw 0; a.forEach(f=>{ if(f.tex&&f.ru&&Array.isArray(f.d)){ f.id='c'+Date.now()+Math.floor(Math.random()*999); f.custom=true; S.custom.push(f) } }); save(); toast('Импортировано'); render() }catch(err){ toast('Неверный формат файла') } });
+});
+function addFormula(){
+ const g=id=>$(id).value.trim(), f={id:'c'+Date.now(),custom:true,t:+g('#a_t'),ru:g('#a_ru'),en:g('#a_en'),tex:g('#a_tex'),desc:g('#a_desc'),w:g('#a_w'),ex:g('#a_ex'),diff:+g('#a_diff'),d:g('#a_d').split('\n').map(s=>s.trim()).filter(Boolean),ans:g('#a_ans')||null};
+ if(!f.ru||!f.tex||!f.desc) return toast('Заполните название, формулу и описание');
+ if(f.d.length<3) return toast('Нужно минимум 3 дистрактора');
+ if(f.ans){ try{ parseEq(f.ans) }catch(e){ return toast('Ответ для ввода: '+e.message) } }
+ S.custom.push(f); save(); toast('Формула добавлена'); render();
+}
+document.addEventListener('keydown',e=>{
+ if(location.hash!=='#/train'||!SESS)return; const it=cur(); if(!it)return;
+ const typing=e.target.id==='typein';
+ if(e.target.matches('input,textarea')&&!typing)return;
+ if(typing){ if(e.key==='Enter'){e.preventDefault();submitType(false)} return }
+ if(it.kind==='card'){
+  if((e.key===' '||e.key==='Enter')&&!UI.flip){e.preventDefault();UI.flip=true;render()}
+  else if(UI.flip&&'1234'.includes(e.key)&&e.key){ rateCard([0,1,3,4,5][+e.key]) }
+ } else if(it.kind==='mc'||it.kind==='mcr'){
+  if(UI.res){ if(e.key==='Enter'||e.key===' '){e.preventDefault();if(SESS.mode!=='timed')nextQ()} }
+  else if('1234'.includes(e.key)&&e.key) pickOpt(+e.key-1);
+ } else if(UI.res&&(e.key==='Enter')&&SESS.mode!=='timed') nextQ();
+});
+/* карточка по Enter/пробелу при фокусе */
+function boot(){ applyTheme(); matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{if(!S.theme){applyTheme();render()}}); if(S.sess&&S.sess.items&&location.hash==='#/train'){SESS=S.sess} render() }
+/* режим «потренировать эту формулу» */
+const _bq=buildQueue; buildQueue=function(c){ if(c.only){ const f=getF(c.only); return f?[{id:f.id,kind:'card'}]:[] } return _bq(c) };
+boot();
+</script>
+</body>
+</html>
